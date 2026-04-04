@@ -20,9 +20,9 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore DeviceManagement/Backend/DeviceManagement.Api/DeviceManagement.Api.slnx
+      run: dotnet restore Backend/DeviceManagement.Api/DeviceManagement.Api.slnx
 
     - name: Build project
-      run: dotnet build DeviceManagement/Backend/DeviceManagement.Api/DeviceManagement.Api.slnx --no-restore --configuration Release
+      run: dotnet build Backend/DeviceManagement.Api/DeviceManagement.Api.slnx --no-restore --configuration Release
       
     
