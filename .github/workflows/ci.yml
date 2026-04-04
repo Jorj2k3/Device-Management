@@ -1,4 +1,4 @@
-name: .NET CI Pipeline
+name: .NET Enterprise Pipeline
 
 on:
   push:
@@ -7,22 +7,44 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  lint:
+    name: Code Quality (Lint)
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
-
-    - name: Setup .NET 8
+    - name: Setup .NET 10
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
+    - name: Check Code Formatting
+      run: dotnet format Backend/DeviceManagement.Api/DeviceManagement.Api.slnx --verify-no-changes
 
+  unit-tests:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+    - name: Run Tests
+      run: dotnet test Backend/DeviceManagement.Api/DeviceManagement.Api.slnx --logger html
+
+  build:
+    name: Build & Verify
+    needs: [lint, unit-tests]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
     - name: Restore dependencies
       run: dotnet restore Backend/DeviceManagement.Api/DeviceManagement.Api.slnx
-
     - name: Build project
       run: dotnet build Backend/DeviceManagement.Api/DeviceManagement.Api.slnx --no-restore --configuration Release
-      
-    
