@@ -1,7 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+
 namespace DeviceManagement.Api.Models
 {
+    /// <summary>
+    /// Represents the user class in the Device Management API.
+    /// </summary>
     public class User
     {
         [Key]
