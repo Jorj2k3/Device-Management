@@ -1,8 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace DeviceManagement.Api.Models
 {
+    /// <summary>
+    /// Represents the device class in the Device Management API.
+    /// </summary>
     public class Device
     {
         [Key]

@@ -1,8 +1,12 @@
 ﻿using DeviceManagement.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace DeviceManagement.Api.Data
 {
+    /// <summary>
+    /// Represents the database context for the Device Management API.
+    /// </summary>
     public class DeviceDbContext : DbContext
     {
         public DeviceDbContext(DbContextOptions<DeviceDbContext> options) : base(options)

@@ -1,4 +1,5 @@
 using DeviceManagement.Api.Data;
+using DeviceManagement.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,8 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DeviceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IDeviceService, DeviceService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

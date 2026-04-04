@@ -24,7 +24,6 @@
     <Folder Include="DTOs\" />
     <Folder Include="Middleware\" />
     <Folder Include="Utilities\" />
-    <Folder Include="Services\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 
