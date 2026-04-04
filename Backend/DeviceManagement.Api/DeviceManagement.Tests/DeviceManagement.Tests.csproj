@@ -23,4 +23,8 @@
     <Folder Include="UnitTests\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DeviceManagement.Api\DeviceManagement.Api.csproj" />
+  </ItemGroup>
+
 </Project>
