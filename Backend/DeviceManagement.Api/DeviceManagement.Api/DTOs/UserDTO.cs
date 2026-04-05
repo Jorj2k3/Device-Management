@@ -5,12 +5,11 @@
     /// </summary>
     public class UserDTO
     {
-        public int UserID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
-        public ICollection<DeviceDTO> Devices { get; set; } = new List<DeviceDTO>();
     }
 }
     

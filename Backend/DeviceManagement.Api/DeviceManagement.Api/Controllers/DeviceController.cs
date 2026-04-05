@@ -23,7 +23,7 @@ namespace DeviceManagement.Api.Controllers
             _deviceService = deviceService;
         }
 
-        // GET: api/devices
+        // GET: api/Devices
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DeviceDTO>>> GetDevices()
         {
@@ -46,7 +46,7 @@ namespace DeviceManagement.Api.Controllers
             return Ok(devicesDTO);
         }
 
-        // GET: api/devices/{id}
+        // GET: api/Devices/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<DeviceDTO>> GetDevice(int id)
         {
@@ -74,7 +74,7 @@ namespace DeviceManagement.Api.Controllers
             return Ok(deviceDTO);
         }
 
-        // POST: api/devices
+        // POST: api/Devices
         [HttpPost]
         public async Task<ActionResult<DeviceDTO>> CreateDevice(DeviceDTO deviceDTO)
         {
@@ -97,7 +97,7 @@ namespace DeviceManagement.Api.Controllers
             return CreatedAtAction(nameof(GetDevice), new { id = createdDevice.Id }, deviceDTO);
         }
 
-        // PUT: api/devices/{id}
+        // PUT: api/Devices/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDevice(int id, DeviceDTO deviceDTO)
         {

@@ -9,7 +9,7 @@ namespace DeviceManagement.Api.Models
     public class User
     {
         [Key]
-        public int UserID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(255)]
