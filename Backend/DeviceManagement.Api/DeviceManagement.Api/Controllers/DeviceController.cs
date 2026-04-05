@@ -101,7 +101,7 @@ namespace DeviceManagement.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDevice(int id, DeviceDTO deviceDTO)
         {
-            if(id != deviceDTO.Id)
+            if (id != deviceDTO.Id)
             {
                 return BadRequest("Device ID mismatch.");
             }
