@@ -1,5 +1,7 @@
 using DeviceManagement.Api.Data;
 using DeviceManagement.Api.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,11 +15,13 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

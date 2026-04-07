@@ -26,88 +26,109 @@ namespace DeviceManagement.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
-            var users = await _userService.GetAllUsersAsync();
-
-            var usersDTO = users.Select(u => new UserDTO
+            try
             {
-                Id = u.Id,
-                Name = u.Name,
-                Email = u.Email,
-                Role = u.Role,
-                Location = u.Location
-            });
+                var users = await _userService.GetAllUsersAsync();
 
-            return Ok(usersDTO);
+                return Ok(users.ToDTOs());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
 
         // GET: api/Users/{id}
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UserDTO>> GetUser(int id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null) return NotFound();
-
-            var usersDTO = new UserDTO
+            try
             {
-                Id = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                Role = user.Role,
-                Location = user.Location
-            };
+                var user = await _userService.GetUserByIdAsync(id);
+                if (user == null) return NotFound();
 
-            return Ok(usersDTO);
+                return Ok(user.ToDTO());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
 
         // POST: api/Users
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UserDTO>> CreateUser(UserDTO userDTO)
         {
-            var newUser = new User
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
             {
-                Name = userDTO.Name,
-                Email = userDTO.Email,
-                Role = "Employee",
-                Location = userDTO.Location
-            };
+                var newUser = userDTO.ToEntity();
+                newUser.Role = "Employee";
 
-            var createdUser = await _userService.CreateUserAsync(newUser);
+                var createdUser = await _userService.CreateUserAsync(newUser);
 
-            userDTO.Id = createdUser.Id;
-            userDTO.Role = createdUser.Role;
+                userDTO.Id = createdUser.Id;
+                userDTO.Role = createdUser.Role;
 
-            return CreatedAtAction(nameof(GetUser), new { id = userDTO.Id }, userDTO);
+                return CreatedAtAction(nameof(GetUser), new { id = userDTO.Id }, userDTO);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
 
         // PUT: api/Users/{id}
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateUser(int id, UserDTO userDTO)
         {
             if (id != userDTO.Id) return BadRequest("The ID does not match the request body.");
 
-            var userToUpdate = new User
+            try
             {
-                Id = userDTO.Id,
-                Name = userDTO.Name,
-                Email = userDTO.Email,
-                Location = userDTO.Location
-            };
+                var userToUpdate = userDTO.ToEntity();
 
-            var updatedUser = await _userService.UpdateUserAsync(id, userToUpdate);
+                var updatedUser = await _userService.UpdateUserAsync(id, userToUpdate);
 
-            if (updatedUser == null) return NotFound();
+                if (updatedUser == null) return NotFound();
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
 
         // DELETE: api/Users/{id}
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var success = await _userService.DeleteUserAsync(id);
-            if (!success) return NotFound();
+            try
+            {
+                var success = await _userService.DeleteUserAsync(id);
+                if (!success) return NotFound();
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
     }
 }

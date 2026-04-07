@@ -25,82 +25,77 @@ namespace DeviceManagement.Api.Controllers
 
         // GET: api/Devices
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<DeviceDTO>>> GetDevices()
         {
-            var devices = await _deviceService.GetAllDevicesAsync();
-
-            var devicesDTO = devices.Select(d => new DeviceDTO
+            try
             {
-                Id = d.Id,
-                Name = d.Name,
-                Manufacturer = d.Manufacturer,
-                Type = d.Type,
-                OperatingSystem = d.OperatingSystem,
-                OsVersion = d.OsVersion,
-                Processor = d.Processor,
-                RamAmountGb = d.RamAmountGb,
-                Description = d.Description,
-                AssignedUserID = d.AssignedUserID
-            });
+                var devices = await _deviceService.GetAllDevicesAsync();
 
-            return Ok(devicesDTO);
+                return Ok(devices.ToDTOs());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
 
         // GET: api/Devices/{id}
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<DeviceDTO>> GetDevice(int id)
         {
-            var device = await _deviceService.GetDeviceByIdAsync(id);
-
-            if (device == null)
+            try
             {
-                return NotFound();
+                var device = await _deviceService.GetDeviceByIdAsync(id);
+
+                if (device == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(device.ToDTO());
             }
-
-            var deviceDTO = new DeviceDTO
+            catch (Exception ex)
             {
-                Id = device.Id,
-                Name = device.Name,
-                Manufacturer = device.Manufacturer,
-                Type = device.Type,
-                OperatingSystem = device.OperatingSystem,
-                OsVersion = device.OsVersion,
-                Processor = device.Processor,
-                RamAmountGb = device.RamAmountGb,
-                Description = device.Description,
-                AssignedUserID = device.AssignedUserID
-            };
-
-            return Ok(deviceDTO);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
 
         // POST: api/Devices
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<DeviceDTO>> CreateDevice(DeviceDTO deviceDTO)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var newDevice = new Device
+            try
             {
-                Name = deviceDTO.Name,
-                Manufacturer = deviceDTO.Manufacturer,
-                Type = deviceDTO.Type,
-                OperatingSystem = deviceDTO.OperatingSystem,
-                OsVersion = deviceDTO.OsVersion,
-                Processor = deviceDTO.Processor,
-                RamAmountGb = deviceDTO.RamAmountGb,
-                Description = deviceDTO.Description,
-                AssignedUserID = deviceDTO.AssignedUserID
-            };
+                var newDevice = deviceDTO.ToEntity();
 
-            var createdDevice = await _deviceService.CreateDeviceAsync(newDevice);
-            deviceDTO.Id = createdDevice.Id;
+                var createdDevice = await _deviceService.CreateDeviceAsync(newDevice);
+                deviceDTO.Id = createdDevice.Id;
 
-            return CreatedAtAction(nameof(GetDevice), new { id = createdDevice.Id }, deviceDTO);
+                return CreatedAtAction(nameof(GetDevice), new { id = createdDevice.Id }, deviceDTO);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
 
         // PUT: api/Devices/{id}
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateDevice(int id, DeviceDTO deviceDTO)
         {
             if (id != deviceDTO.Id)
@@ -108,42 +103,47 @@ namespace DeviceManagement.Api.Controllers
                 return BadRequest("Device ID mismatch.");
             }
 
-            var deviceToUpdate = new Device
+            try
             {
-                Id = deviceDTO.Id,
-                Name = deviceDTO.Name,
-                Manufacturer = deviceDTO.Manufacturer,
-                Type = deviceDTO.Type,
-                OperatingSystem = deviceDTO.OperatingSystem,
-                OsVersion = deviceDTO.OsVersion,
-                Processor = deviceDTO.Processor,
-                RamAmountGb = deviceDTO.RamAmountGb,
-                Description = deviceDTO.Description,
-                AssignedUserID = deviceDTO.AssignedUserID
-            };
+                var deviceToUpdate = deviceDTO.ToEntity();
 
-            var updatedDevice = await _deviceService.UpdateDeviceAsync(id, deviceToUpdate);
+                var updatedDevice = await _deviceService.UpdateDeviceAsync(id, deviceToUpdate);
 
-            if (updatedDevice == null)
-            {
-                return NotFound();
+                if (updatedDevice == null)
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
 
         // DELETE: api/devices/{id}
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteDevice(int id)
         {
-            var device = await _deviceService.GetDeviceByIdAsync(id);
-            if (device == null)
+            try
             {
-                return NotFound();
-            }
-            await _deviceService.DeleteDeviceAsync(id);
+                var device = await _deviceService.GetDeviceByIdAsync(id);
+                if (device == null)
+                {
+                    return NotFound();
+                }
+                await _deviceService.DeleteDeviceAsync(id);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
+            }
         }
     }
 }
