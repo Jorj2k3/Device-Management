@@ -135,7 +135,7 @@ namespace DeviceManagement.Tests.IntegrationTests
             getResponse.EnsureSuccessStatusCode();
 
             var retrievedDevice = await getResponse.Content.ReadFromJsonAsync<DeviceDTO>();
-            
+
             Assert.NotNull(retrievedDevice);
             Assert.Equal(updatedDevice.Name, retrievedDevice.Name);
             Assert.Equal(updatedDevice.Manufacturer, retrievedDevice.Manufacturer);
