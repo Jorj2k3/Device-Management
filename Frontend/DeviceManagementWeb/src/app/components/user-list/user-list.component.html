@@ -1,0 +1,12 @@
+<h2>Company Directory</h2>
+
+<ul>
+  @for (user of users; track user.id) {
+    <li>
+      <strong>{{ user.name }}</strong> ({{ user.role }}) 
+      - Location: {{ user.location }}
+    </li>
+  } @empty {
+    <p>Loading users... (or no users found!)</p>
+  }
+</ul>
