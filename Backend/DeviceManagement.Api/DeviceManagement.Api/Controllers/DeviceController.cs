@@ -1,5 +1,4 @@
 ﻿using DeviceManagement.Api.DTOs;
-using DeviceManagement.Api.Models;
 using DeviceManagement.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +25,6 @@ namespace DeviceManagement.Api.Controllers
         // GET: api/Devices
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<DeviceDTO>>> GetDevices()
         {
@@ -92,7 +90,7 @@ namespace DeviceManagement.Api.Controllers
 
         // PUT: api/Devices/{id}
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -131,12 +129,8 @@ namespace DeviceManagement.Api.Controllers
         {
             try
             {
-                var device = await _deviceService.GetDeviceByIdAsync(id);
-                if (device == null)
-                {
-                    return NotFound();
-                }
-                await _deviceService.DeleteDeviceAsync(id);
+                var success = await _deviceService.DeleteDeviceAsync(id);
+                if (!success) return NotFound();
 
                 return NoContent();
             }

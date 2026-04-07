@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using DeviceManagement.Api.DTOs;
-using DeviceManagement.Api.Models;
 using DeviceManagement.Api.Services;
 
 namespace DeviceManagement.Api.Controllers
 {
     /// <summary>
     /// UserController is responsible for handling HTTP requests related to user management,
-    /// including creating, retrieving, updating, and deleting device records. 
+    /// including creating, retrieving, updating, and deleting user records. 
     /// It interacts with the IUserService to perform these operations and returns appropriate HTTP responses based on the outcome of each request.
     /// </summary>
 
@@ -25,7 +24,6 @@ namespace DeviceManagement.Api.Controllers
         // GET: api/Users
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
