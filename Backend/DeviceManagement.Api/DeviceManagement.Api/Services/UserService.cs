@@ -50,7 +50,6 @@ namespace DeviceManagement.Api.Services
 
             existingUser.Name = user.Name;
             existingUser.Email = user.Email;
-            existingUser.Role = user.Role;
             existingUser.Location = user.Location;
 
             await _context.SaveChangesAsync();
