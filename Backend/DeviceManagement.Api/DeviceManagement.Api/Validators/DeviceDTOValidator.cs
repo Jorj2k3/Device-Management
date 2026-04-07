@@ -3,6 +3,9 @@ using FluentValidation;
 
 namespace DeviceManagement.Api.Validators
 {
+    /// <summary>
+    /// Validator for the DeviceDTO class.
+    /// </summary>
     public class DeviceDTOValidator : AbstractValidator<DeviceDTO>
     {
         public DeviceDTOValidator()

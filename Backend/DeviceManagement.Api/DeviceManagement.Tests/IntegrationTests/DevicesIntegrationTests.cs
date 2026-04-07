@@ -10,6 +10,9 @@ using System.Net.Http.Json;
 
 namespace DeviceManagement.Tests.IntegrationTests
 {
+    /// <summary>
+    /// Provides integration tests for device-related API endpoints using a test web application factory.
+    /// </summary>
     public class DevicesIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>, IAsyncLifetime
     {
         private readonly CustomWebApplicationFactory<Program> _factory;

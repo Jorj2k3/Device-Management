@@ -24,6 +24,9 @@ namespace DeviceManagement.Api.Controllers
 
         // GET: api/Users
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
         {
             try
