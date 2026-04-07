@@ -1,0 +1,12 @@
+<h2>Company Directory</h2>
+
+<ul>
+  @for (device of devices; track device.id) {
+    <li>
+      <strong>{{ device.name }}</strong> ({{ device.type }}) 
+      - User: {{ device.AssignedUserID }}
+    </li>
+  } @empty {
+    <p>Loading devices... (or no devices found!)</p>
+  }
+</ul>

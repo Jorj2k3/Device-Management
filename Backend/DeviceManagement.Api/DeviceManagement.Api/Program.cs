@@ -22,6 +22,12 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.UseCors(policy => policy
+    .WithOrigins("http://localhost:4200")
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+);
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
