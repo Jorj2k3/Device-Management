@@ -78,6 +78,8 @@ namespace DeviceManagement.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<DeviceDTO>> CreateDevice(DeviceDTO deviceDTO)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var newDevice = new Device
             {
                 Name = deviceDTO.Name,
