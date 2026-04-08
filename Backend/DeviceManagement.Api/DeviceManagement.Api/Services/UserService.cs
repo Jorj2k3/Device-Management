@@ -55,5 +55,10 @@ namespace DeviceManagement.Api.Services
             await _context.SaveChangesAsync();
             return existingUser;
         }
+
+        public async Task<User?> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
     }
 }

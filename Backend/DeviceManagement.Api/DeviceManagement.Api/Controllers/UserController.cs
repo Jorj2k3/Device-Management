@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using DeviceManagement.Api.DTOs;
+﻿using DeviceManagement.Api.DTOs;
 using DeviceManagement.Api.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace DeviceManagement.Api.Controllers
 {
@@ -13,6 +15,7 @@ namespace DeviceManagement.Api.Controllers
 
     [Route("api/[controller]s")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -23,6 +26,7 @@ namespace DeviceManagement.Api.Controllers
 
         // GET: api/Users
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()
@@ -48,6 +52,14 @@ namespace DeviceManagement.Api.Controllers
         {
             try
             {
+                var currentUserId = int.Parse(User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value ?? "0");
+                var currentUserRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+                if (currentUserRole != "Admin" && currentUserId != id)
+                {
+                    return Forbid();
+                }
+
                 var user = await _userService.GetUserByIdAsync(id);
                 if (user == null) return NotFound();
 
@@ -55,12 +67,14 @@ namespace DeviceManagement.Api.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
             }
         }
 
         // POST: api/Users
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -88,6 +102,7 @@ namespace DeviceManagement.Api.Controllers
 
         // PUT: api/Users/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -114,6 +129,7 @@ namespace DeviceManagement.Api.Controllers
 
         // DELETE: api/Users/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
