@@ -13,6 +13,13 @@
         <input type="text" class="form-control" formControlName="name" placeholder="Name"
                [class.is-invalid]="deviceForm.get('name')?.invalid && deviceForm.get('name')?.touched">
         <label>Device Name</label>
+        
+        @if (deviceForm.get('name')?.hasError('required') && deviceForm.get('name')?.touched) {
+          <div class="invalid-feedback">Device Name is required.</div>
+        }
+        @if (deviceForm.get('name')?.hasError('duplicateName') && deviceForm.get('name')?.touched) {
+          <div class="invalid-feedback">A device with this name already exists in the inventory!</div>
+        }
       </div>
 
       <div class="row">
@@ -21,11 +28,16 @@
             <input type="text" class="form-control" formControlName="manufacturer" placeholder="Mfg"
                    [class.is-invalid]="deviceForm.get('manufacturer')?.invalid && deviceForm.get('manufacturer')?.touched">
             <label>Manufacturer</label>
+            @if (deviceForm.get('manufacturer')?.hasError('required') && deviceForm.get('manufacturer')?.touched) {
+              <div class="invalid-feedback">Manufacturer is required.</div>
+            }
           </div>
         </div>
+        
         <div class="col-6">
           <div class="form-floating mb-2">
-            <select class="form-select" formControlName="type">
+            <select class="form-select" formControlName="type"
+                    [class.is-invalid]="deviceForm.get('type')?.invalid && deviceForm.get('type')?.touched">
               <option value="Laptop">Laptop</option>
               <option value="Desktop">Desktop</option>
               <option value="Mobile">Mobile</option>
@@ -40,7 +52,8 @@
       <div class="row">
         <div class="col-6">
           <div class="form-floating mb-2">
-            <select class="form-select" formControlName="operatingSystem">
+            <select class="form-select" formControlName="operatingSystem"
+                    [class.is-invalid]="deviceForm.get('operatingSystem')?.invalid && deviceForm.get('operatingSystem')?.touched">
               <option value="Windows">Windows</option>
               <option value="macOS">macOS</option>
               <option value="Linux">Linux</option>
@@ -50,11 +63,15 @@
             <label>Operating System</label>
           </div>
         </div>
+        
         <div class="col-6">
           <div class="form-floating mb-2">
             <input type="text" class="form-control" formControlName="osVersion" placeholder="Ver"
                    [class.is-invalid]="deviceForm.get('osVersion')?.invalid && deviceForm.get('osVersion')?.touched">
             <label>OS Version</label>
+            @if (deviceForm.get('osVersion')?.hasError('required') && deviceForm.get('osVersion')?.touched) {
+              <div class="invalid-feedback">OS Version is required.</div>
+            }
           </div>
         </div>
       </div>
@@ -65,13 +82,23 @@
             <input type="text" class="form-control" formControlName="processor" placeholder="CPU"
                    [class.is-invalid]="deviceForm.get('processor')?.invalid && deviceForm.get('processor')?.touched">
             <label>Processor (CPU)</label>
+            @if (deviceForm.get('processor')?.hasError('required') && deviceForm.get('processor')?.touched) {
+              <div class="invalid-feedback">Processor is required.</div>
+            }
           </div>
         </div>
+        
         <div class="col-6">
           <div class="form-floating mb-2">
             <input type="number" class="form-control" formControlName="ramAmountGb" placeholder="RAM"
                    [class.is-invalid]="deviceForm.get('ramAmountGb')?.invalid && deviceForm.get('ramAmountGb')?.touched">
             <label>RAM (GB)</label>
+            @if (deviceForm.get('ramAmountGb')?.hasError('required') && deviceForm.get('ramAmountGb')?.touched) {
+              <div class="invalid-feedback">RAM amount is required.</div>
+            }
+            @if (deviceForm.get('ramAmountGb')?.hasError('min') && deviceForm.get('ramAmountGb')?.touched) {
+              <div class="invalid-feedback">RAM must be at least 1 GB.</div>
+            }
           </div>
         </div>
       </div>
@@ -87,7 +114,7 @@
 
       <div class="form-floating mb-3">
         <textarea class="form-control" formControlName="description" placeholder="Notes" style="height: 80px"></textarea>
-        <label>Notes / Description</label>
+        <label>Notes / Description (Optional)</label>
       </div>
 
       <div class="d-flex gap-2 mt-3">

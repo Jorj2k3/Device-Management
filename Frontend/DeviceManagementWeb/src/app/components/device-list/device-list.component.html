@@ -34,6 +34,7 @@
         <app-device-form 
           [isEditing]="isEditing"
           [initialData]="selectedDevice"
+          [existingDevices]="devices" 
           (save)="onSaveDevice($event)"
           (cancel)="onCloseForm()">
         </app-device-form>
