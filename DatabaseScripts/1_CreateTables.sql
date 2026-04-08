@@ -29,6 +29,7 @@ BEGIN
         Processor NVARCHAR(100) NOT NULL,
         RamAmountGB INT NOT NULL CHECK (RamAmountGB > 0),
         Description NVARCHAR(MAX) NULL,
+        Status NVARCHAR(50) NOT NULL DEFAULT 'Available',
         AssignedUserID INT NULL CONSTRAINT FK_Devices_Users FOREIGN KEY (AssignedUserID) REFERENCES Users(Id) ON DELETE SET NULL
     );
     PRINT 'Devices table created successfully.';

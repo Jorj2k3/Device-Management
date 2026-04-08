@@ -61,6 +61,7 @@ namespace DeviceManagement.Api.Services
             existingDevice.RamAmountGb = device.RamAmountGb;
             existingDevice.Description = device.Description;
             existingDevice.AssignedUserID = device.AssignedUserID;
+            existingDevice.Status = device.Status;
 
             await _context.SaveChangesAsync();
             return existingDevice;

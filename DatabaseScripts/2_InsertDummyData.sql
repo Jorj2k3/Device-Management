@@ -9,17 +9,29 @@ BEGIN
     INSERT INTO Users (Name, Email, PasswordHash, Role, Location)
     VALUES ('Alice Admin', 'admin@company.com', '$2a$11$n0CXny2iWLWrQoZ6FNyHgO2Q8.hJMqLicQKIz./v5QJYCcfJvri8O', 'Admin', 'Cluj-Napoca');
 END
+ELSE
+BEGIN
+    UPDATE Users SET PasswordHash = '$2a$11$n0CXny2iWLWrQoZ6FNyHgO2Q8.hJMqLicQKIz./v5QJYCcfJvri8O' WHERE Email = 'admin@company.com';
+END
 
 IF NOT EXISTS (SELECT 1 FROM Users WHERE Email = 'bob@company.com')
 BEGIN
     INSERT INTO Users (Name, Email, PasswordHash, Role, Location)
     VALUES ('Bob Builder', 'bob@company.com', '$2a$11$n0CXny2iWLWrQoZ6FNyHgO2Q8.hJMqLicQKIz./v5QJYCcfJvri8O', 'User', 'London');
 END
+ELSE
+BEGIN
+    UPDATE Users SET PasswordHash = '$2a$11$n0CXny2iWLWrQoZ6FNyHgO2Q8.hJMqLicQKIz./v5QJYCcfJvri8O' WHERE Email = 'bob@company.com';
+END
 
 IF NOT EXISTS (SELECT 1 FROM Users WHERE Email = 'charlie@company.com')
 BEGIN
     INSERT INTO Users (Name, Email, PasswordHash, Role, Location)
     VALUES ('Charlie Chaplin', 'charlie@company.com', '$2a$11$n0CXny2iWLWrQoZ6FNyHgO2Q8.hJMqLicQKIz./v5QJYCcfJvri8O', 'User', 'New York');
+END
+ELSE
+BEGIN
+    UPDATE Users SET PasswordHash = '$2a$11$n0CXny2iWLWrQoZ6FNyHgO2Q8.hJMqLicQKIz./v5QJYCcfJvri8O' WHERE Email = 'charlie@company.com';
 END
 
 PRINT 'User checks and inserts completed.';
