@@ -1,0 +1,26 @@
+<div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+  <h2>Dashboard Login</h2>
+  
+  @if (errorMessage) {
+    <p style="color: red; font-weight: bold;">{{ errorMessage }}</p>
+  }
+
+  <form (ngSubmit)="onSubmit()">
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; font-weight: bold;">Email:</label>
+      <input type="email" name="email" [(ngModel)]="credentials.email" required 
+             style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;">
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label style="display: block; font-weight: bold;">Password:</label>
+      <input type="password" name="password" [(ngModel)]="credentials.password" required 
+             style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;">
+    </div>
+
+    <button type="submit" 
+            style="width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
+      Log In
+    </button>
+  </form>
+</div>

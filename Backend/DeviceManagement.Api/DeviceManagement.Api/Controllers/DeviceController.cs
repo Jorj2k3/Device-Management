@@ -2,6 +2,7 @@
 using DeviceManagement.Api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DeviceManagement.Api.Controllers
 {
@@ -13,6 +14,7 @@ namespace DeviceManagement.Api.Controllers
 
     [Route("api/[controller]s")]
     [ApiController]
+    [Authorize]
     public class DeviceController : ControllerBase
     {
         private readonly IDeviceService _deviceService;
@@ -66,6 +68,7 @@ namespace DeviceManagement.Api.Controllers
 
         // POST: api/Devices
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -90,6 +93,7 @@ namespace DeviceManagement.Api.Controllers
 
         // PUT: api/Devices/{id}
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -122,6 +126,7 @@ namespace DeviceManagement.Api.Controllers
 
         // DELETE: api/devices/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
