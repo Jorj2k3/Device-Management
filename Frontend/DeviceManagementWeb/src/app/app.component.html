@@ -1,8 +1,27 @@
-<h1>Device Management Dashboard</h1>
+@if (authService.isLoggedIn()) {
+  <nav class="top-bar shadow-sm" style="background: linear-gradient(135deg, var(--blue-darkest) 0%, var(--blue-dark) 100%);">
+    <div class="content-wrapper nav-inner">
+      <a class="navbar-brand" routerLink="/devices">
+        <i class="bi bi-cpu me-2 fs-4"></i>
+        <span>DeviceManager</span>
+      </a>
 
-<nav style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #ccc;">
-  <a routerLink="/users" style="margin-right: 15px; font-weight: bold;">Users</a>
-  <a routerLink="/devices" style="font-weight: bold;">Devices</a>
-</nav>
+      <div class="nav-links">
+        <a class="btn-nav" routerLink="/devices" routerLinkActive="btn-nav-active">
+          <i class="bi bi-laptop me-1"></i> Devices
+        </a>
+        <a class="btn-nav" routerLink="/users" routerLinkActive="btn-nav-active">
+          <i class="bi bi-people me-1"></i> Users
+        </a>
+      </div>
+
+      <div class="ms-auto">
+        <button class="btn btn-logout d-flex align-items-center" (click)="logout()">
+          <i class="bi bi-box-arrow-right me-1"></i> Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+}
 
 <router-outlet></router-outlet>

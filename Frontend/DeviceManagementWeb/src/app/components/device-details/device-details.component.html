@@ -1,0 +1,51 @@
+<div class="card shadow-sm border-0 fade-in">
+  <div class="card-header d-flex justify-content-between align-items-center py-3"
+       style="background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 100%); color: white;">
+    <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Device Details</h5>
+    <button type="button" class="btn btn-sm btn-outline-light" (click)="close.emit()">
+      <i class="bi bi-x-lg me-1"></i> Close
+    </button>
+  </div>
+
+  <div class="card-body p-4">
+    <h5 class="fw-bold mb-1" style="color: var(--blue-dark);">{{ device.name }}</h5>
+    <p class="text-muted small mb-3">{{ device.manufacturer }} &middot; {{ device.type }}</p>
+
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="detail-label"><i class="bi bi-window me-1"></i> OS</span>
+        <span class="detail-value">{{ device.operatingSystem }} {{ device.osVersion }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label"><i class="bi bi-cpu me-1"></i> Processor</span>
+        <span class="detail-value">{{ device.processor }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label"><i class="bi bi-memory me-1"></i> RAM</span>
+        <span class="detail-value">{{ device.ramAmountGb }} GB</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label"><i class="bi bi-person me-1"></i> Assigned To</span>
+        <span class="detail-value">{{ device.assignedUserName || 'Unassigned' }}</span>
+      </div>
+    </div>
+
+    @if (device.description) {
+      <div class="mt-2 p-2 rounded" style="background: var(--blue-lightest);">
+        <small class="text-muted d-block mb-1 fw-semibold">Description</small>
+        <span class="text-muted small">{{ device.description }}</span>
+      </div>
+    }
+
+    @if (isAdmin) {
+      <div class="d-flex gap-2 mt-3">
+        <button class="btn btn-primary w-100" (click)="edit.emit()">
+          <i class="bi bi-pencil me-1"></i> Edit
+        </button>
+        <button class="btn btn-outline-danger w-100" (click)="delete.emit(device.id)">
+          <i class="bi bi-trash me-1"></i> Delete
+        </button>
+      </div>
+    }
+  </div>
+</div>

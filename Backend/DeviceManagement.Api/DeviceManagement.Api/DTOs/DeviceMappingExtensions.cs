@@ -20,7 +20,9 @@ namespace DeviceManagement.Api.DTOs
                 Processor = device.Processor,
                 RamAmountGb = device.RamAmountGb,
                 Description = device.Description,
-                AssignedUserID = device.AssignedUserID
+                AssignedUserID = device.AssignedUserID,
+                AssignedUserName = device.AssignedUser?.Name,
+                Status = device.Status
             };
         }
 
@@ -37,7 +39,8 @@ namespace DeviceManagement.Api.DTOs
                 Processor = dto.Processor,
                 RamAmountGb = dto.RamAmountGb,
                 Description = dto.Description,
-                AssignedUserID = dto.AssignedUserID
+                AssignedUserID = dto.AssignedUserID,
+                Status = dto.Status
             };
         }
 

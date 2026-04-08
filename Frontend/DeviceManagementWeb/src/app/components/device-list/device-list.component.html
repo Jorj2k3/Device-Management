@@ -1,12 +1,76 @@
-<h2>Company Directory</h2>
+<div class="content-wrapper">
+  
+  @if (isAdmin) {
+    <div class="page-header">
+      <h2><i class="bi bi-laptop me-2"></i>Device Inventory</h2>
+      <button class="btn btn-primary" (click)="onOpenCreate()">
+        <i class="bi bi-plus-lg me-1"></i> Add New Device
+      </button>
+    </div>
 
-<ul>
-  @for (device of devices; track device.id) {
-    <li>
-      <strong>{{ device.name }}</strong> ({{ device.type }}) 
-      - User: {{ device.AssignedUserID }}
-    </li>
-  } @empty {
-    <p>Loading devices... (or no devices found!)</p>
+    <div class="row">
+      <div [class]="(selectedDevice || isCreating || isEditing) ? 'col-lg-7' : 'col-12'">
+        <app-device-table 
+          [devices]="devices" 
+          [selectedDeviceId]="selectedDevice?.id"
+          [mode]="'admin'" 
+          (viewDevice)="onViewDevice($event)">
+        </app-device-table>
+      </div>
+
+      @if (selectedDevice && !isCreating && !isEditing) {
+        <div class="col-lg-5">
+          <app-device-details [device]="selectedDevice" [isAdmin]="isAdmin"
+            (close)="onCloseDetails()" (edit)="onOpenEdit()" (delete)="onDeleteDevice($event)">
+          </app-device-details>
+        </div>
+      }
+
+      @if (isCreating || isEditing) {
+        <div class="col-lg-5">
+          <app-device-form [isEditing]="isEditing" [initialData]="selectedDevice" [existingDevices]="devices" 
+            (save)="onSaveDevice($event)" (cancel)="onCloseForm()">
+          </app-device-form>
+        </div>
+      }
+    </div>
+    
+  } @else {
+    <ul class="nav nav-tabs mb-4 mt-2">
+      <li class="nav-item">
+        <a class="nav-link fs-5" [class.active]="activeTab === 'my-devices'" 
+           (click)="activeTab = 'my-devices'" style="cursor: pointer;">
+           My Devices
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-5" [class.active]="activeTab === 'available'" 
+           (click)="activeTab = 'available'" style="cursor: pointer;">
+           Available Devices
+        </a>
+      </li>
+    </ul>
+
+    <div class="row">
+      <div class="col-12">
+        
+        @if (activeTab === 'my-devices') {
+          <app-device-table 
+            [devices]="myDevices" 
+            [mode]="'my-devices'"
+            (unassign)="onUnassign($event)">
+          </app-device-table>
+        }
+        
+        @if (activeTab === 'available') {
+          <app-device-table 
+            [devices]="availableDevices" 
+            [mode]="'available'"
+            (assign)="onAssign($event)">
+          </app-device-table>
+        }
+
+      </div>
+    </div>
   }
-</ul>
+</div>

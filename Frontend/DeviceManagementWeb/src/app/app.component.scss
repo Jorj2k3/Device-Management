@@ -1,0 +1,75 @@
+.top-bar {
+  border-bottom: 2px solid rgba(96, 165, 250, 0.2);
+  padding: 10px 0;
+}
+
+.nav-inner {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  justify-content: space-between;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: white !important;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 2rem;
+}
+
+.btn-nav {
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-nav:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-nav-active {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  font-weight: 600;
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: white;
+  background: rgba(220, 38, 38, 0.7);
+  border: 1px solid rgba(220, 38, 38, 0.9);
+  border-radius: 8px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background: rgba(220, 38, 38, 0.9);
+  color: white;
+}

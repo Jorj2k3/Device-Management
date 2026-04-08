@@ -35,4 +35,36 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('jwt_token');
   }
+
+  isAdmin(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      
+      const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      
+      return role === 'Admin';
+    } catch (e) {
+      console.error('Error decoding token', e);
+      return false;
+    }
+  }
+
+  getCurrentUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const nameIdClaim = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
+      const userId = payload[nameIdClaim] || payload.nameid;
+      
+      return userId ? parseInt(userId, 10) : null;
+    } catch (e) {
+      console.error('Error decoding token for user ID', e);
+      return null;
+    }
+  }
 }

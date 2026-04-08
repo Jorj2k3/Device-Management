@@ -1,0 +1,20 @@
+.device-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--blue-lightest);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue-primary);
+  font-size: 1.1rem;
+}
+
+.selected-row {
+  background-color: var(--blue-lightest) !important;
+  border-left: 3px solid var(--blue-primary);
+}
+
+tbody tr {
+  transition: background-color 0.15s;
+}

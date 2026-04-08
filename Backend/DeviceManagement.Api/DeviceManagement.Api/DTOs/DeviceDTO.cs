@@ -15,6 +15,8 @@
         public int RamAmountGb { get; set; }
         public string? Description { get; set; }
         public int? AssignedUserID { get; set; }
+        public string? AssignedUserName { get; set; }
+        public string Status { get; set; } = string.Empty;
 
     }
 }
