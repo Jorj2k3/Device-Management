@@ -102,7 +102,6 @@ namespace DeviceManagement.Api.Controllers
 
         // PUT: api/Users/{id}
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -110,6 +109,14 @@ namespace DeviceManagement.Api.Controllers
         public async Task<IActionResult> UpdateUser(int id, UserDTO userDTO)
         {
             if (id != userDTO.Id) return BadRequest("The ID does not match the request body.");
+
+            var currentUserId = int.Parse(User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value ?? "0");
+            var currentUserRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+            if (currentUserRole != "Admin" && currentUserId != id)
+            {
+                return Forbid();
+            }
 
             try
             {
@@ -129,12 +136,19 @@ namespace DeviceManagement.Api.Controllers
 
         // DELETE: api/Users/{id}
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteUser(int id)
         {
+            var currentUserId = int.Parse(User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value ?? "0");
+            var currentUserRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+            if (currentUserRole != "Admin" && currentUserId != id)
+            {
+                return Forbid();
+            }
+
             try
             {
                 var success = await _userService.DeleteUserAsync(id);
