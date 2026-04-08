@@ -1,12 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'; //
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-device-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './device-list.component.html',
   styleUrl: './device-list.component.scss'
 })
@@ -16,8 +17,10 @@ export class DeviceListComponent implements OnInit {
   
   devices: any[] = [];
   isAdmin = false;
+  selectedDevice: any = null;
   
-  selectedDevice: any = null; 
+  isCreating = false;
+  newDevice: any = {};
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
@@ -32,11 +35,47 @@ export class DeviceListComponent implements OnInit {
   }
 
   viewDetails(device: any) {
+    this.isCreating = false;
     this.selectedDevice = device;
   }
 
   closeDetails() {
     this.selectedDevice = null;
+  }
+
+  openCreateForm() {
+    this.selectedDevice = null; 
+    this.isCreating = true;
+
+    this.newDevice = {
+      name: '',
+      manufacturer: '',
+      type: 'Laptop',
+      operatingSystem: 'Windows',
+      osVersion: '',
+      processor: '',
+      ramAmountGb: null,
+      description: '',
+      status: 'Available',
+      assignedUserID: null
+    };
+  }
+
+  closeCreateForm() {
+    this.isCreating = false;
+  }
+
+  saveNewDevice() {
+    this.apiService.createDevice(this.newDevice).subscribe({
+      next: () => {
+        this.isCreating = false;
+        this.loadDevices();
+      },
+      error: (err) => {
+        console.error('Error creating device:', err);
+        alert('Failed to create device. Check console for details.');
+      }
+    });
   }
 
   deleteDevice(id: number) {
