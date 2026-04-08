@@ -1,0 +1,101 @@
+<div class="card shadow border-0 rounded-lg sticky-top" style="top: 20px;">
+  
+  <div class="card-header text-white d-flex justify-content-between align-items-center"
+       [ngClass]="isEditing ? 'bg-primary' : 'bg-success'">
+    <h5 class="mb-0">{{ isEditing ? 'Edit Device' : 'Add New Device' }}</h5>
+    <button type="button" class="btn-close btn-close-white" (click)="cancel.emit()"></button>
+  </div>
+  
+  <div class="card-body">
+    <form [formGroup]="deviceForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" formControlName="name" placeholder="Name"
+               [class.is-invalid]="deviceForm.get('name')?.invalid && deviceForm.get('name')?.touched">
+        <label>Device Name</label>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="form-floating mb-2">
+            <input type="text" class="form-control" formControlName="manufacturer" placeholder="Mfg"
+                   [class.is-invalid]="deviceForm.get('manufacturer')?.invalid && deviceForm.get('manufacturer')?.touched">
+            <label>Manufacturer</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-floating mb-2">
+            <select class="form-select" formControlName="type">
+              <option value="Laptop">Laptop</option>
+              <option value="Desktop">Desktop</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Tablet">Tablet</option>
+              <option value="Server">Server</option>
+            </select>
+            <label>Device Type</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="form-floating mb-2">
+            <select class="form-select" formControlName="operatingSystem">
+              <option value="Windows">Windows</option>
+              <option value="macOS">macOS</option>
+              <option value="Linux">Linux</option>
+              <option value="iOS">iOS</option>
+              <option value="Android">Android</option>
+            </select>
+            <label>Operating System</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-floating mb-2">
+            <input type="text" class="form-control" formControlName="osVersion" placeholder="Ver"
+                   [class.is-invalid]="deviceForm.get('osVersion')?.invalid && deviceForm.get('osVersion')?.touched">
+            <label>OS Version</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <div class="form-floating mb-2">
+            <input type="text" class="form-control" formControlName="processor" placeholder="CPU"
+                   [class.is-invalid]="deviceForm.get('processor')?.invalid && deviceForm.get('processor')?.touched">
+            <label>Processor (CPU)</label>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-floating mb-2">
+            <input type="number" class="form-control" formControlName="ramAmountGb" placeholder="RAM"
+                   [class.is-invalid]="deviceForm.get('ramAmountGb')?.invalid && deviceForm.get('ramAmountGb')?.touched">
+            <label>RAM (GB)</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-floating mb-2">
+        <select class="form-select" formControlName="status">
+          <option value="Available">Available</option>
+          <option value="In Use">In Use</option>
+          <option value="Under Repair">Under Repair</option>
+        </select>
+        <label>Device Status</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <textarea class="form-control" formControlName="description" placeholder="Notes" style="height: 80px"></textarea>
+        <label>Notes / Description</label>
+      </div>
+
+      <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn w-100" [ngClass]="isEditing ? 'btn-primary' : 'btn-success'">
+          {{ isEditing ? 'Update Device' : 'Save Device' }}
+        </button>
+        <button type="button" class="btn btn-outline-secondary w-100" (click)="cancel.emit()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

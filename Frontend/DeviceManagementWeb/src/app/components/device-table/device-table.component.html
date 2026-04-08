@@ -1,0 +1,43 @@
+<div class="card shadow border-0 rounded-lg mb-4">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Assigned To</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (device of devices; track device.id) {
+            <tr [class.table-primary]="selectedDeviceId === device.id">
+              <td class="fw-bold">{{ device.name }}</td>
+              <td>{{ device.type }}</td>
+              <td>
+                <span class="badge" [ngClass]="device.status === 'Available' ? 'bg-success' : (device.status === 'Under Repair' ? 'bg-danger' : 'bg-warning text-dark')">
+                  {{ device.status }}
+                </span>
+              </td>
+              <td>
+                @if (device.assignedUserName) {
+                  {{ device.assignedUserName }}
+                } @else {
+                  <span class="text-muted fst-italic">Unassigned</span>
+                }
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-info" (click)="onViewClick(device)">View</button>
+              </td>
+            </tr>
+          }
+          @if (devices.length === 0) {
+            <tr><td colspan="5" class="text-center py-4 text-muted">No devices found.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="card shadow border-0 rounded-lg sticky-top" style="top: 20px;">
+  <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Device Details</h5>
+    <button type="button" class="btn-close btn-close-white" (click)="close.emit()"></button>
+  </div>
+  
+  <div class="card-body">
+    <h4 class="fw-bold text-primary">{{ device.name }}</h4>
+    <p class="text-muted mb-4">{{ device.manufacturer }} - {{ device.type }}</p>
+
+    <ul class="list-group list-group-flush mb-4">
+      <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+        <strong>OS:</strong> <span>{{ device.operatingSystem }} {{ device.osVersion }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+        <strong>Processor:</strong> <span>{{ device.processor }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+        <strong>RAM:</strong> <span>{{ device.ramAmountGb }} GB</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+        <strong>Status:</strong>
+        <span class="badge" [ngClass]="device.status === 'Available' ? 'bg-success' : 'bg-warning text-dark'">
+          {{ device.status }}
+        </span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+        <strong>Owner:</strong>
+        <span>{{ device.assignedUserName || 'Unassigned' }}</span>
+      </li>
+      @if (device.description) {
+        <li class="list-group-item px-0 mt-2 border-bottom-0">
+          <strong>Notes:</strong><br>
+          <span class="text-muted small">{{ device.description }}</span>
+        </li>
+      }
+    </ul>
+
+    @if (isAdmin) {
+      <div class="d-flex gap-2 mt-4">
+        <button class="btn btn-outline-primary w-100" (click)="edit.emit()">Edit</button>
+        <button class="btn btn-outline-danger w-100" (click)="delete.emit(device.id)">Delete</button>
+      </div>
+    }
+  </div>
+</div>
