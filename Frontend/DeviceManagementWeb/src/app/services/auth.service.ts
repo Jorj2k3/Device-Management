@@ -20,6 +20,10 @@ export class AuthService {
     );
   }
 
+  register(userData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/Register`, userData);
+  }
+
   getToken(): string | null {
     return localStorage.getItem('jwt_token');
   }
