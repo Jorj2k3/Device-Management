@@ -1,10 +1,16 @@
 ﻿using DeviceManagement.Api.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text.Encodings.Web;
 
 namespace DeviceManagement.Tests.IntegrationTests
 {
@@ -30,7 +36,33 @@ namespace DeviceManagement.Tests.IntegrationTests
                     .Options;
 
                 services.AddScoped<DeviceDbContext>(_ => new DeviceDbContext(options));
+
+                services.AddAuthentication("TestScheme")
+                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
             });
+        }
+    }
+
+    public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+    {
+        public TestAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
+            ILoggerFactory logger, UrlEncoder encoder)
+            : base(options, logger, encoder) { }
+
+        protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+        {
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, "1"),
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.Email, "admin@test.com")
+            };
+
+            var identity = new ClaimsIdentity(claims, "TestScheme");
+            var principal = new ClaimsPrincipal(identity);
+            var ticket = new AuthenticationTicket(principal, "TestScheme");
+
+            return Task.FromResult(AuthenticateResult.Success(ticket));
         }
     }
 }

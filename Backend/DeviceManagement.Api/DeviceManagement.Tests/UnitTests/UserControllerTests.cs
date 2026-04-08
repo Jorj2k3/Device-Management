@@ -2,6 +2,7 @@
 using DeviceManagement.Api.DTOs;
 using DeviceManagement.Api.Models;
 using DeviceManagement.Api.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
@@ -9,6 +10,8 @@ using Moq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using Xunit;
 
@@ -54,6 +57,17 @@ namespace DeviceManagement.Tests.UnitTests
                        .ReturnsAsync((User?)null);
 
             var controller = new UserController(mockService.Object);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, "1"),
+                        new Claim(ClaimTypes.Role, "Admin")
+                    }, "TestScheme"))
+                }
+            };
 
             var result = await controller.GetUser(fakeId);
 
