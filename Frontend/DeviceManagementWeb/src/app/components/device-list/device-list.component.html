@@ -1,12 +1,74 @@
-<h2>Company Directory</h2>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Device Inventory</h2>
+    @if (isAdmin) {
+      <button class="btn btn-primary">Add New Device</button>
+    }
+  </div>
 
-<ul>
-  @for (device of devices; track device.id) {
-    <li>
-      <strong>{{ device.name }}</strong> ({{ device.type }}) 
-      - User: {{ device.AssignedUserID }}
-    </li>
-  } @empty {
-    <p>Loading devices... (or no devices found!)</p>
-  }
-</ul>
+  <div class="card shadow border-0 rounded-lg">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Manufacturer</th>
+              <th>OS</th>
+              <th>RAM (GB)</th>
+              <th>Status</th>
+              <th>Assigned To</th>
+              @if (isAdmin) {
+                <th class="text-center">Actions</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (device of devices; track device.id) {
+              <tr>
+                <td>{{ device.id }}</td>
+                <td class="fw-bold">{{ device.name }}</td>
+                <td>{{ device.manufacturer }}</td>
+                <td>{{ device.operatingSystem }} {{ device.osVersion }}</td>
+                <td>{{ device.ramAmountGb }}</td>
+                <td>
+                  <span class="badge" 
+                        [ngClass]="device.status === 'Available' ? 'bg-success' : 'bg-warning text-dark'">
+                    {{ device.status }}
+                  </span>
+                </td>
+                
+                <td>
+                  @if (device.assignedUserName) {
+                    {{ device.assignedUserName }}
+                  } @else {
+                    <span class="text-muted fst-italic">Unassigned</span>
+                  }
+                </td>
+
+                @if (isAdmin) {
+                  <td class="text-center">
+                    <button class="btn btn-sm btn-outline-secondary me-2">Edit</button>
+                    
+                    <button class="btn btn-sm btn-outline-danger" (click)="deleteDevice(device.id)">
+                      Delete
+                    </button>
+                  </td>
+                }
+              </tr>
+            }
+            
+            @if (devices.length === 0) {
+              <tr>
+                <td colspan="8" class="text-center py-4 text-muted">
+                  No devices found in the inventory.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
