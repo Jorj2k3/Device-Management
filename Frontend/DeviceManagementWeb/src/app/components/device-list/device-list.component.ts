@@ -13,13 +13,17 @@ import { AuthService } from '../../services/auth.service';
 export class DeviceListComponent implements OnInit {
   private apiService = inject(ApiService);
   private authService = inject(AuthService);
+  
   devices: any[] = [];
   isAdmin = false;
+  
+  selectedDevice: any = null; 
 
   ngOnInit() {
-    this.isAdmin = this.authService.isAdmin(); // <-- 4. Set the flag when the page loads!
+    this.isAdmin = this.authService.isAdmin();
     this.loadDevices();
   }
+
   loadDevices() {
     this.apiService.getDevices().subscribe({
       next: (data) => this.devices = data,
@@ -27,10 +31,21 @@ export class DeviceListComponent implements OnInit {
     });
   }
 
+  viewDetails(device: any) {
+    this.selectedDevice = device;
+  }
+
+  closeDetails() {
+    this.selectedDevice = null;
+  }
+
   deleteDevice(id: number) {
     if (confirm('Are you sure you want to delete this device?')) {
       this.apiService.deleteDevice(id).subscribe({
-        next: () => this.loadDevices(),
+        next: () => {
+          this.selectedDevice = null;
+          this.loadDevices();
+        },
         error: (err) => console.error('Error deleting device:', err)
       });
     }
