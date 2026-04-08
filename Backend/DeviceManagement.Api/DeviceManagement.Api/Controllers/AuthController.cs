@@ -45,5 +45,31 @@ namespace DeviceManagement.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred during login.");
             }
         }
+
+        [HttpPost("Register")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDTO request)
+        {
+            var existingUser = await _userService.GetUserByEmailAsync(request.Email);
+            if (existingUser != null)
+            {
+                return BadRequest("An account with this email already exists.");
+            }
+
+            var newUser = new Models.User
+            {
+                Name = request.Name,
+                Email = request.Email,
+                PasswordHash = request.Password,
+                Role = "Employee",
+                Location = request.Location
+            };
+
+            await _userService.CreateUserAsync(newUser);
+
+            return Ok(new { message = "Registration successful" });
+        }
     }
 }
