@@ -12,10 +12,11 @@ import { Device } from '../../models/device.model';
 export class DeviceTableComponent {
   @Input() devices: Device[] = [];
   @Input() selectedDeviceId?: number;
+  
+  // NEW: Tells the table which buttons to show!
+  @Input() mode: 'admin' | 'my-devices' | 'available' = 'admin'; 
 
   @Output() viewDevice = new EventEmitter<Device>();
-
-  onViewClick(device: Device) {
-    this.viewDevice.emit(device);
-  }
+  @Output() assign = new EventEmitter<Device>();   // NEW EVENT
+  @Output() unassign = new EventEmitter<Device>(); // NEW EVENT
 }

@@ -51,4 +51,20 @@ export class AuthService {
       return false;
     }
   }
+
+  getCurrentUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const nameIdClaim = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier';
+      const userId = payload[nameIdClaim] || payload.nameid;
+      
+      return userId ? parseInt(userId, 10) : null;
+    } catch (e) {
+      console.error('Error decoding token for user ID', e);
+      return null;
+    }
+  }
 }

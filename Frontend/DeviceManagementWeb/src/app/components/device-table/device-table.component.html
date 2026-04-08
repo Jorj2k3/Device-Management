@@ -29,7 +29,15 @@
                 }
               </td>
               <td class="text-center">
-                <button class="btn btn-sm btn-outline-info" (click)="onViewClick(device)">View</button>
+                @if (mode === 'admin') {
+                  <button class="btn btn-sm btn-outline-info" (click)="viewDevice.emit(device)">View</button>
+                }
+                @if (mode === 'my-devices') {
+                  <button class="btn btn-sm btn-outline-warning" (click)="unassign.emit(device)">Return Device</button>
+                }
+                @if (mode === 'available') {
+                  <button class="btn btn-sm btn-outline-success" (click)="assign.emit(device)">Assign to Me</button>
+                }
               </td>
             </tr>
           }

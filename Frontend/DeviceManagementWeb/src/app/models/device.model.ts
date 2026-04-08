@@ -9,6 +9,6 @@ export interface Device {
   ramAmountGb: number;
   description?: string;
   status: 'Available' | 'In Use' | 'Under Repair';
-  assignedUserID?: number | null;
+  assignedUserId?: number | null;
   assignedUserName?: string | null;
 }

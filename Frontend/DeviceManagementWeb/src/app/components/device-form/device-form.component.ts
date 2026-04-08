@@ -44,7 +44,7 @@ export class DeviceFormComponent implements OnInit, OnChanges {
       ramAmountGb: [null, [Validators.required, Validators.min(1)]],
       status: ['Available', Validators.required],
       description: [''],
-      assignedUserID: [null],
+      assignedUserId: [null],
       assignedUserName: [null]
     });
   }
@@ -66,7 +66,7 @@ export class DeviceFormComponent implements OnInit, OnChanges {
         type: 'Laptop', 
         operatingSystem: 'Windows', 
         status: 'Available',
-        assignedUserID: null,
+        assignedUserId: null,
         assignedUserName: null
       });
     }

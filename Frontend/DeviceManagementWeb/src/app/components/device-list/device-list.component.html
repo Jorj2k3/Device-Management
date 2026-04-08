@@ -1,45 +1,74 @@
 <div class="container mt-5">
   
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Device Inventory</h2>
-    @if (isAdmin) {
+  @if (isAdmin) {
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Device Inventory</h2>
       <button class="btn btn-primary" (click)="onOpenCreate()">Add New Device</button>
-    }
-  </div>
-
-  <div class="row">
-    
-    <div [class]="(selectedDevice || isCreating || isEditing) ? 'col-lg-7' : 'col-12'">
-      <app-device-table 
-        [devices]="devices" 
-        [selectedDeviceId]="selectedDevice?.id"
-        (viewDevice)="onViewDevice($event)">
-      </app-device-table>
     </div>
 
-    @if (selectedDevice && !isCreating && !isEditing) {
-      <div class="col-lg-5">
-        <app-device-details 
-          [device]="selectedDevice" 
-          [isAdmin]="isAdmin"
-          (close)="onCloseDetails()"
-          (edit)="onOpenEdit()"
-          (delete)="onDeleteDevice($event)">
-        </app-device-details>
+    <div class="row">
+      <div [class]="(selectedDevice || isCreating || isEditing) ? 'col-lg-7' : 'col-12'">
+        <app-device-table 
+          [devices]="devices" 
+          [selectedDeviceId]="selectedDevice?.id"
+          [mode]="'admin'" 
+          (viewDevice)="onViewDevice($event)">
+        </app-device-table>
       </div>
-    }
 
-    @if (isCreating || isEditing) {
-      <div class="col-lg-5">
-        <app-device-form 
-          [isEditing]="isEditing"
-          [initialData]="selectedDevice"
-          [existingDevices]="devices" 
-          (save)="onSaveDevice($event)"
-          (cancel)="onCloseForm()">
-        </app-device-form>
+      @if (selectedDevice && !isCreating && !isEditing) {
+        <div class="col-lg-5">
+          <app-device-details [device]="selectedDevice" [isAdmin]="isAdmin"
+            (close)="onCloseDetails()" (edit)="onOpenEdit()" (delete)="onDeleteDevice($event)">
+          </app-device-details>
+        </div>
+      }
+
+      @if (isCreating || isEditing) {
+        <div class="col-lg-5">
+          <app-device-form [isEditing]="isEditing" [initialData]="selectedDevice" [existingDevices]="devices" 
+            (save)="onSaveDevice($event)" (cancel)="onCloseForm()">
+          </app-device-form>
+        </div>
+      }
+    </div>
+    
+  } @else {
+    <ul class="nav nav-tabs mb-4 mt-2">
+      <li class="nav-item">
+        <a class="nav-link fs-5" [class.active]="activeTab === 'my-devices'" 
+           (click)="activeTab = 'my-devices'" style="cursor: pointer;">
+           My Devices
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-5" [class.active]="activeTab === 'available'" 
+           (click)="activeTab = 'available'" style="cursor: pointer;">
+           Available Devices
+        </a>
+      </li>
+    </ul>
+
+    <div class="row">
+      <div class="col-12">
+        
+        @if (activeTab === 'my-devices') {
+          <app-device-table 
+            [devices]="myDevices" 
+            [mode]="'my-devices'"
+            (unassign)="onUnassign($event)">
+          </app-device-table>
+        }
+        
+        @if (activeTab === 'available') {
+          <app-device-table 
+            [devices]="availableDevices" 
+            [mode]="'available'"
+            (assign)="onAssign($event)">
+          </app-device-table>
+        }
+
       </div>
-    }
-
-  </div>
+    </div>
+  }
 </div>
