@@ -35,12 +35,16 @@ namespace DeviceManagement.Api.Services
 
         public async Task<IEnumerable<Device>> GetAllDevicesAsync()
         {
-            return await _context.Devices.ToListAsync();
+            return await _context.Devices
+                .Include(d => d.AssignedUser)
+                .ToListAsync();
         }
 
         public async Task<Device?> GetDeviceByIdAsync(int id)
         {
-            return await _context.Devices.FindAsync(id);
+            return await _context.Devices
+                .Include(d => d.AssignedUser)
+                .FirstOrDefaultAsync(d => d.Id == id);
         }
 
         public async Task<Device?> UpdateDeviceAsync(int id, Device device)

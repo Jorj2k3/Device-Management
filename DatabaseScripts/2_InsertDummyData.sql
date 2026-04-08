@@ -2,22 +2,24 @@ USE DeviceManagementDb;
 GO
 
 -- Insert dummy Users
+-- Password for all dummy users is: DummyHash123!
+-- Hashed with BCrypt
 IF NOT EXISTS (SELECT 1 FROM Users WHERE Email = 'admin@company.com')
 BEGIN
     INSERT INTO Users (Name, Email, PasswordHash, Role, Location)
-    VALUES ('Alice Admin', 'admin@company.com', 'DummyHash123!', 'Admin', 'Cluj-Napoca');
+    VALUES ('Alice Admin', 'admin@company.com', '$2a$11$n0CXny2iWLWrQoZ6FNyHgO2Q8.hJMqLicQKIz./v5QJYCcfJvri8O', 'Admin', 'Cluj-Napoca');
 END
 
 IF NOT EXISTS (SELECT 1 FROM Users WHERE Email = 'bob@company.com')
 BEGIN
     INSERT INTO Users (Name, Email, PasswordHash, Role, Location)
-    VALUES ('Bob Builder', 'bob@company.com', 'DummyHash123!', 'User', 'London');
+    VALUES ('Bob Builder', 'bob@company.com', '$2a$11$n0CXny2iWLWrQoZ6FNyHgO2Q8.hJMqLicQKIz./v5QJYCcfJvri8O', 'User', 'London');
 END
 
 IF NOT EXISTS (SELECT 1 FROM Users WHERE Email = 'charlie@company.com')
 BEGIN
     INSERT INTO Users (Name, Email, PasswordHash, Role, Location)
-    VALUES ('Charlie Chaplin', 'charlie@company.com', 'DummyHash123!', 'User', 'New York');
+    VALUES ('Charlie Chaplin', 'charlie@company.com', '$2a$11$n0CXny2iWLWrQoZ6FNyHgO2Q8.hJMqLicQKIz./v5QJYCcfJvri8O', 'User', 'New York');
 END
 
 PRINT 'User checks and inserts completed.';

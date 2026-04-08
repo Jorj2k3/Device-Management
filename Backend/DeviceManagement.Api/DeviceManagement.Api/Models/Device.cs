@@ -45,5 +45,7 @@ namespace DeviceManagement.Api.Models
 
         [ForeignKey("AssignedUserID")]
         public User? AssignedUser { get; set; }
+
+        public string Status { get; set; } = "Available";
     }
 }

@@ -30,7 +30,7 @@ namespace DeviceManagement.Api.Controllers
             {
                 var user = await _userService.GetUserByEmailAsync(request.Email);
 
-                if (user == null || user.PasswordHash != request.Password)
+                if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
                 {
                     return Unauthorized("Invalid email or password.");
                 }
@@ -62,7 +62,7 @@ namespace DeviceManagement.Api.Controllers
             {
                 Name = request.Name,
                 Email = request.Email,
-                PasswordHash = request.Password,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 Role = "Employee",
                 Location = request.Location
             };
