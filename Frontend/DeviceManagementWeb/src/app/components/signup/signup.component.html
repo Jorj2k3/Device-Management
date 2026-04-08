@@ -1,59 +1,55 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-      
-      <div class="card shadow-lg border-0 rounded-lg mt-5">
-        <div class="card-header bg-success text-white text-center py-4">
-          <h3 class="font-weight-light my-2">Create an Account</h3>
-        </div>
-        
-        <div class="card-body p-4">
-          @if (errorMessage) {
-            <div class="alert alert-danger text-center" role="alert">
-              {{ errorMessage }}
-            </div>
-          }
-
-          <form (ngSubmit)="onSubmit()">
-            
-            <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="inputName" name="name" 
-                     placeholder="John Doe" [(ngModel)]="newUser.name" required>
-              <label for="inputName">Full Name</label>
-            </div>
-
-            <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="inputEmail" name="email" 
-                     placeholder="name@example.com" [(ngModel)]="newUser.email" required>
-              <label for="inputEmail">Email address</label>
-            </div>
-            
-            <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="inputPassword" name="password" 
-                     placeholder="Password" [(ngModel)]="newUser.password" required>
-              <label for="inputPassword">Password</label>
-            </div>
-
-            <div class="form-floating mb-4">
-              <input type="text" class="form-control" id="inputLocation" name="location" 
-                     placeholder="New York" [(ngModel)]="newUser.location" required>
-              <label for="inputLocation">Location</label>
-            </div>
-
-            <div class="d-grid gap-2 mt-4 mb-0">
-              <button class="btn btn-success btn-lg" type="submit">Sign Up</button>
-            </div>
-            
-          </form>
-        </div>
-        
-        <div class="card-footer text-center py-3 border-top-0">
-          <div class="small">
-            <a routerLink="/login" class="text-decoration-none">Already have an account? Log in!</a>
-          </div>
-        </div>
-        
+<div class="auth-page d-flex align-items-center justify-content-center">
+  <div class="auth-card fade-in">
+    <div class="auth-header">
+      <div class="auth-icon">
+        <i class="bi bi-person-plus"></i>
       </div>
+      <h2>Create Account</h2>
+      <p>Join Device Management</p>
+    </div>
+
+    <div class="auth-body">
+      @if (errorMessage) {
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {{ errorMessage }}
+        </div>
+      }
+
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="inputName" name="name"
+                 placeholder="John Doe" [(ngModel)]="newUser.name" required>
+          <label for="inputName"><i class="bi bi-person me-1"></i> Full Name</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="inputEmail" name="email"
+                 placeholder="name@example.com" [(ngModel)]="newUser.email" required>
+          <label for="inputEmail"><i class="bi bi-envelope me-1"></i> Email address</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control" id="inputPassword" name="password"
+                 placeholder="Password" [(ngModel)]="newUser.password" required>
+          <label for="inputPassword"><i class="bi bi-key me-1"></i> Password</label>
+        </div>
+
+        <div class="form-floating mb-4">
+          <input type="text" class="form-control" id="inputLocation" name="location"
+                 placeholder="New York" [(ngModel)]="newUser.location" required>
+          <label for="inputLocation"><i class="bi bi-geo-alt me-1"></i> Location</label>
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100" type="submit">
+          <i class="bi bi-check-circle me-2"></i>Sign Up
+        </button>
+      </form>
+    </div>
+
+    <div class="auth-footer">
+      Already have an account?
+      <a routerLink="/login">Log in here</a>
     </div>
   </div>
 </div>

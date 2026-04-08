@@ -1,48 +1,69 @@
-<div class="card shadow border-0 rounded-lg mb-4">
+<div class="card shadow-sm border-0 mb-4 fade-in">
   <div class="card-body p-0">
     <div class="table-responsive">
-      <table class="table table-hover table-striped mb-0">
-        <thead class="table-dark">
+      <table class="table table-hover mb-0">
+        <thead>
           <tr>
             <th>Name</th>
             <th>Type</th>
-            <th>Status</th>
             <th>Assigned To</th>
             <th class="text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
           @for (device of devices; track device.id) {
-            <tr [class.table-primary]="selectedDeviceId === device.id">
-              <td class="fw-bold">{{ device.name }}</td>
-              <td>{{ device.type }}</td>
+            <tr [class.selected-row]="selectedDeviceId === device.id" style="cursor: pointer;">
               <td>
-                <span class="badge" [ngClass]="device.status === 'Available' ? 'bg-success' : (device.status === 'Under Repair' ? 'bg-danger' : 'bg-warning text-dark')">
-                  {{ device.status }}
-                </span>
+                <div class="d-flex align-items-center">
+                  <div class="device-icon me-2">
+                    <i class="bi" [ngClass]="{
+                      'bi-laptop': device.type === 'Laptop',
+                      'bi-pc-display': device.type === 'Desktop',
+                      'bi-phone': device.type === 'Mobile',
+                      'bi-tablet': device.type === 'Tablet',
+                      'bi-hdd-rack': device.type === 'Server'
+                    }"></i>
+                  </div>
+                  <div>
+                    <div class="fw-semibold">{{ device.name }}</div>
+                    <small class="text-muted">{{ device.manufacturer }}</small>
+                  </div>
+                </div>
               </td>
+              <td><span class="text-muted">{{ device.type }}</span></td>
               <td>
                 @if (device.assignedUserName) {
-                  {{ device.assignedUserName }}
+                  <span><i class="bi bi-person-fill me-1 text-muted"></i>{{ device.assignedUserName }}</span>
                 } @else {
                   <span class="text-muted fst-italic">Unassigned</span>
                 }
               </td>
               <td class="text-center">
                 @if (mode === 'admin') {
-                  <button class="btn btn-sm btn-outline-info" (click)="viewDevice.emit(device)">View</button>
+                  <button class="btn btn-sm btn-outline-primary" (click)="viewDevice.emit(device)">
+                    <i class="bi bi-eye me-1"></i>View
+                  </button>
                 }
                 @if (mode === 'my-devices') {
-                  <button class="btn btn-sm btn-outline-warning" (click)="unassign.emit(device)">Return Device</button>
+                  <button class="btn btn-sm btn-outline-warning" (click)="unassign.emit(device)">
+                    <i class="bi bi-arrow-return-left me-1"></i>Return
+                  </button>
                 }
                 @if (mode === 'available') {
-                  <button class="btn btn-sm btn-outline-success" (click)="assign.emit(device)">Assign to Me</button>
+                  <button class="btn btn-sm btn-primary" (click)="assign.emit(device)">
+                    <i class="bi bi-plus-circle me-1"></i>Assign to Me
+                  </button>
                 }
               </td>
             </tr>
           }
           @if (devices.length === 0) {
-            <tr><td colspan="5" class="text-center py-4 text-muted">No devices found.</td></tr>
+            <tr>
+              <td colspan="5" class="text-center py-5">
+                <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                <span class="text-muted">No devices found.</span>
+              </td>
+            </tr>
           }
         </tbody>
       </table>

@@ -1,45 +1,43 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-      
-      <div class="card shadow-lg border-0 rounded-lg mt-5">
-        <div class="card-header bg-primary text-white text-center py-4">
-          <h3 class="font-weight-light my-2">Dashboard Login</h3>
-        </div>
-        
-        <div class="card-body p-4">
-          @if (errorMessage) {
-            <div class="alert alert-danger text-center" role="alert">
-              {{ errorMessage }}
-            </div>
-          }
-
-          <form (ngSubmit)="onSubmit()">
-            <div class="form-floating mb-3">
-              <input type="email" class="form-control" id="inputEmail" name="email" 
-                     placeholder="name@example.com" [(ngModel)]="credentials.email" required>
-              <label for="inputEmail">Email address</label>
-            </div>
-            
-            <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="inputPassword" name="password" 
-                     placeholder="Password" [(ngModel)]="credentials.password" required>
-              <label for="inputPassword">Password</label>
-            </div>
-
-            <div class="d-grid gap-2 mt-4 mb-0">
-              <button class="btn btn-primary btn-lg" type="submit">Log In</button>
-            </div>
-          </form>
-        </div>
-        
-        <div class="card-footer text-center py-3 border-top-0">
-          <div class="small">
-            <a routerLink="/signup" class="text-decoration-none">Don't have an account? Sign up!</a>
-          </div>
-        </div>
-        
+<div class="auth-page d-flex align-items-center justify-content-center">
+  <div class="auth-card fade-in">
+    <div class="auth-header">
+      <div class="auth-icon">
+        <i class="bi bi-shield-lock"></i>
       </div>
+      <h2>Welcome Back</h2>
+      <p>Sign in to Device Management</p>
+    </div>
+
+    <div class="auth-body">
+      @if (errorMessage) {
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {{ errorMessage }}
+        </div>
+      }
+
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="inputEmail" name="email"
+                 placeholder="name@example.com" [(ngModel)]="credentials.email" required>
+          <label for="inputEmail"><i class="bi bi-envelope me-1"></i> Email address</label>
+        </div>
+
+        <div class="form-floating mb-4">
+          <input type="password" class="form-control" id="inputPassword" name="password"
+                 placeholder="Password" [(ngModel)]="credentials.password" required>
+          <label for="inputPassword"><i class="bi bi-key me-1"></i> Password</label>
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100" type="submit">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Log In
+        </button>
+      </form>
+    </div>
+
+    <div class="auth-footer">
+      Don't have an account?
+      <a routerLink="/signup">Create one now</a>
     </div>
   </div>
 </div>
