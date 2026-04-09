@@ -1,3 +1,5 @@
+USE DeviceManagementDb;
+GO
 -- Create Users table
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
 BEGIN

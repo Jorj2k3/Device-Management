@@ -7,12 +7,11 @@ import { Observable, tap } from 'rxjs';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://localhost:7177/api/Auth'; 
+  private baseUrl = '/api/Auth'; 
 
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/Login`, credentials).pipe(
       tap((response: any) => {
-        // 2. If successful, save the token to the browser's Local Storage!
         if (response && response.token) {
           localStorage.setItem('jwt_token', response.token);
         }

@@ -46,8 +46,15 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+// Auto-create database and tables on startup (for Docker)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DeviceDbContext>();
+    db.Database.EnsureCreated();
+}
+
 app.UseCors(policy => policy
-    .WithOrigins("http://localhost:4200")
+    .WithOrigins("http://localhost:4200", "http://localhost", "http://localhost:80")
     .AllowAnyMethod()
     .AllowAnyHeader()
 );
@@ -55,9 +62,8 @@ app.UseCors(policy => policy
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 

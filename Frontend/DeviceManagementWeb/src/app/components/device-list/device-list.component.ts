@@ -45,8 +45,8 @@ export class DeviceListComponent implements OnInit {
         this.devices = data;
         
         if (!this.isAdmin && this.currentUserId) {
-          this.myDevices = this.devices.filter(d => d.assignedUserId === this.currentUserId);
-          this.availableDevices = this.devices.filter(d => d.assignedUserId === null && d.status === 'Available');
+          this.myDevices = this.devices.filter(d => d.assignedUserID === this.currentUserId);
+          this.availableDevices = this.devices.filter(d => d.assignedUserID === null && d.status === 'Available');
         }
       },
       error: (err) => console.error('API Error:', err)
@@ -60,7 +60,7 @@ export class DeviceListComponent implements OnInit {
     
     const updatedDevice: Device = {
       ...device,
-      assignedUserId: this.currentUserId,
+      assignedUserID: this.currentUserId,
       status: 'In Use' 
     };
 
@@ -73,7 +73,7 @@ export class DeviceListComponent implements OnInit {
   onUnassign(device: Device) {
     const updatedDevice: Device = {
       ...device,
-      assignedUserId: null,
+      assignedUserID: null,
       status: 'Available' 
     };
 
@@ -124,7 +124,12 @@ export class DeviceListComponent implements OnInit {
 
   onSaveDevice(device: Device) {
     if (this.isEditing) {
-      this.apiService.updateDevice(device.id, device).subscribe({
+      // Preserve the assignedUserID from the original device since the form doesn't expose it
+      const updatedDevice: Device = {
+        ...device,
+        assignedUserID: this.selectedDevice?.assignedUserID ?? device.assignedUserID
+      };
+      this.apiService.updateDevice(updatedDevice.id, updatedDevice).subscribe({
         next: () => {
           this.isEditing = false;
           this.selectedDevice = null;
