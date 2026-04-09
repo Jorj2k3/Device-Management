@@ -83,17 +83,18 @@ export class DeviceFormComponent implements OnInit, OnChanges {
 
   isGeneratingAi = false;
   onGenerateDescription() {
+    this.isGeneratingAi = true;
     const data = this.deviceForm.value;
   
     if (!data.name || !data.manufacturer || !data.processor || !data.ramAmountGb) {
       alert('Please fill out the Name, Manufacturer, Processor, and RAM first so the AI has data to work with!');
-      return;
+      this.isGeneratingAi = false;
+      return; 
     }
-
-    this.isGeneratingAi = true;
     
     this.apiService.generateDescription(data).subscribe({
       next: (res) => {
+        console.log("API Response:", res);
         this.deviceForm.patchValue({ description: res.description });
         this.isGeneratingAi = false;
       },

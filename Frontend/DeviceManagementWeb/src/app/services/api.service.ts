@@ -47,6 +47,6 @@ export class ApiService {
   }
 
   generateDescription(deviceData: any): Observable<{description: string}> {
-    return this.http.post<{description: string}>(`${this.baseUrl}/GenerateDescription`, deviceData);
+    return this.http.post<{description: string}>(`${this.baseUrl}/Devices/GenerateDescription`, deviceData);
   }
 }
