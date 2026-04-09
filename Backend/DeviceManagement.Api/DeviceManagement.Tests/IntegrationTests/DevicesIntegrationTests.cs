@@ -155,7 +155,8 @@ namespace DeviceManagement.Tests.IntegrationTests
         public async Task UpdateDevice_ReturnsBadRequest_WhenIdsDoNotMatch()
         {
             var mockService = new Mock<IDeviceService>();
-            var controller = new DeviceController(mockService.Object);
+            var mockAiService = new Mock<IAiService>();
+            var controller = new DeviceController(mockService.Object, mockAiService.Object);
 
             int urlId = 5;
             var bodyDto = new DeviceDTO { Id = 99, Name = "Mismatched Device" };
