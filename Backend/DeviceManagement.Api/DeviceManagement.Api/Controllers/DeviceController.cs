@@ -18,10 +18,12 @@ namespace DeviceManagement.Api.Controllers
     public class DeviceController : ControllerBase
     {
         private readonly IDeviceService _deviceService;
+        private readonly IAiService _aiService;
 
-        public DeviceController(IDeviceService deviceService)
+        public DeviceController(IDeviceService deviceService, IAiService aiService)
         {
             _deviceService = deviceService;
+            _aiService = aiService;
         }
 
         // GET: api/Devices
@@ -143,6 +145,17 @@ namespace DeviceManagement.Api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred processing your request.");
             }
+        }
+
+        [HttpPost("GenerateDescription")]
+        [Authorize]
+        public async Task<ActionResult<object>> GenerateDescription([FromBody] DeviceDTO specs)
+        {
+            var description = await _aiService.GenerateDeviceDescriptionAsync(
+                specs.Name, specs.Manufacturer, specs.OperatingSystem,
+                specs.Type, specs.RamAmountGb, specs.Processor);
+
+            return Ok(new { description = description });
         }
     }
 }

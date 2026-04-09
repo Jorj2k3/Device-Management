@@ -30,7 +30,9 @@ namespace DeviceManagement.Tests.UnitTests
             mockService.Setup(service => service.GetAllDevicesAsync())
                        .ReturnsAsync(fakeDevices);
 
-            var controller = new DeviceController(mockService.Object);
+            var mockAiService = new Mock<IAiService>();
+
+            var controller = new DeviceController(mockService.Object, mockAiService.Object);
 
             var result = await controller.GetDevices();
 
@@ -48,8 +50,8 @@ namespace DeviceManagement.Tests.UnitTests
 
             mockService.Setup(service => service.GetDeviceByIdAsync(fakeId))
                        .ReturnsAsync((Device?)null);
-
-            var controller = new DeviceController(mockService.Object);
+            var mockAiService = new Mock<IAiService>();
+            var controller = new DeviceController(mockService.Object, mockAiService.Object);
 
             var result = await controller.GetDevice(fakeId);
 
@@ -60,7 +62,8 @@ namespace DeviceManagement.Tests.UnitTests
         public async Task CreateDevice_ReturnsBadRequest_WhenModelStateIsInvalid()
         {
             var mockService = new Mock<IDeviceService>();
-            var controller = new DeviceController(mockService.Object);
+            var mockAiService = new Mock<IAiService>();
+            var controller = new DeviceController(mockService.Object, mockAiService.Object);
             controller.ModelState.AddModelError("Name", "The Name field is required.");
             var newDeviceDto = new DeviceDTO
             {
@@ -98,8 +101,9 @@ namespace DeviceManagement.Tests.UnitTests
 
             mockService.Setup(service => service.CreateDeviceAsync(It.IsAny<Device>()))
                        .ReturnsAsync((Device device) => device);
+            var mockAiService = new Mock<IAiService>();
 
-            var controller = new DeviceController(mockService.Object);
+            var controller = new DeviceController(mockService.Object, mockAiService.Object);
 
             var result = await controller.CreateDevice(newDeviceDto);
 

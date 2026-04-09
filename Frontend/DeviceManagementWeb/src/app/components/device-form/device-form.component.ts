@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angu
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Device } from '../../models/device.model';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-device-form',
@@ -32,7 +33,7 @@ export class DeviceFormComponent implements OnInit, OnChanges {
     return exists ? { duplicateName: true } : null; 
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private apiService: ApiService) {
     this.deviceForm = this.fb.group({
       id: [0],
       name: ['', [Validators.required, this.duplicateNameValidator]],
@@ -78,5 +79,29 @@ export class DeviceFormComponent implements OnInit, OnChanges {
     } else {
       this.deviceForm.markAllAsTouched(); 
     }
+  }
+
+  isGeneratingAi = false;
+  onGenerateDescription() {
+    this.isGeneratingAi = true;
+    const data = this.deviceForm.value;
+  
+    if (!data.name || !data.manufacturer || !data.processor || !data.ramAmountGb) {
+      alert('Please fill out the Name, Manufacturer, Processor, and RAM first so the AI has data to work with!');
+      this.isGeneratingAi = false;
+      return; 
+    }
+    
+    this.apiService.generateDescription(data).subscribe({
+      next: (res) => {
+        console.log("API Response:", res);
+        this.deviceForm.patchValue({ description: res.description });
+        this.isGeneratingAi = false;
+      },
+      error: (err) => {
+        console.error('AI Error:', err);
+        this.isGeneratingAi = false;
+      }
+    });
   }
 }

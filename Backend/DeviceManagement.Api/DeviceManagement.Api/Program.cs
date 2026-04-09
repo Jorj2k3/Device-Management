@@ -15,6 +15,7 @@ builder.Services.AddDbContext<DeviceDbContext>(options =>
 
 builder.Services.AddScoped<IDeviceService, DeviceService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddHttpClient<IAiService, GeminiAiService>();
 
 builder.Services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
 
