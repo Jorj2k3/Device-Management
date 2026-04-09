@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { Device } from '../../models/device.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { DeviceTableComponent } from '../device-table/device-table.component';
 import { DeviceDetailsComponent } from '../device-details/device-details.component';
@@ -19,6 +20,8 @@ import { DeviceFormComponent } from '../device-form/device-form.component';
 export class DeviceListComponent implements OnInit {
   private apiService = inject(ApiService);
   private authService = inject(AuthService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   
   devices: Device[] = [];
   isAdmin = false;
@@ -36,6 +39,15 @@ export class DeviceListComponent implements OnInit {
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
     this.currentUserId = this.authService.getCurrentUserId(); 
+
+    this.route.queryParams.subscribe(params => {
+      if (params['tab']) {
+        this.activeTab = params['tab'] as 'my-devices' | 'available';
+      } else if (!this.isAdmin) {
+        this.router.navigate([], { queryParams: { tab: 'my-devices' } });
+      }
+    });
+
     this.loadDevices();
   }
 
@@ -57,25 +69,29 @@ export class DeviceListComponent implements OnInit {
 
   onAssign(device: Device) {
     if (!this.currentUserId) return;
-    
-    const updatedDevice: Device = {
-      ...device,
-      assignedUserID: this.currentUserId,
-      status: 'In Use' 
-    };
+    const updatedDevice: Device = { ...device, assignedUserID: this.currentUserId, status: 'In Use' };
 
     this.apiService.updateDevice(device.id, updatedDevice).subscribe({
-      next: () => this.loadDevices(), 
+      next: () => {
+        // Automatically jump to the My Devices tab when they claim a device!
+        this.router.navigate([], { queryParams: { tab: 'my-devices' } }); 
+        this.loadDevices();
+      },
       error: (err) => console.error('Error assigning device', err)
     });
   }
 
   onUnassign(device: Device) {
-    const updatedDevice: Device = {
-      ...device,
-      assignedUserID: null,
-      status: 'Available' 
-    };
+    const updatedDevice: Device = { ...device, assignedUserID: null, status: 'Available' };
+
+    this.apiService.updateDevice(device.id, updatedDevice).subscribe({
+      next: () => {
+        // Automatically jump to the Available tab when they return a device!
+        this.router.navigate([], { queryParams: { tab: 'available' } }); 
+        this.loadDevices();
+      },
+      error: (err) => console.error('Error returning device', err)
+    });
 
     this.apiService.updateDevice(device.id, updatedDevice).subscribe({
       next: () => this.loadDevices(), 

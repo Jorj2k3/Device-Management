@@ -7,12 +7,23 @@
       </a>
 
       <div class="nav-links">
-        <a class="btn-nav" routerLink="/devices" routerLinkActive="btn-nav-active">
-          <i class="bi bi-laptop me-1"></i> Devices
-        </a>
-        <a class="btn-nav" routerLink="/users" routerLinkActive="btn-nav-active">
-          <i class="bi bi-people me-1"></i> Users
-        </a>
+       @if (authService.isAdmin()) {
+          <a class="btn-nav" routerLink="/devices" routerLinkActive="btn-nav-active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-laptop me-1"></i> Devices
+          </a>
+          <a class="btn-nav" routerLink="/users" routerLinkActive="btn-nav-active">
+            <i class="bi bi-people me-1"></i> Users
+          </a>
+        } 
+        @else {
+          <a class="btn-nav" routerLink="/devices" [queryParams]="{tab: 'my-devices'}" routerLinkActive="btn-nav-active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-person-badge me-1"></i> My Devices
+          </a>
+          <a class="btn-nav" routerLink="/devices" [queryParams]="{tab: 'available'}" routerLinkActive="btn-nav-active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-box-seam me-1"></i> Available Devices
+          </a>
+        }
+
       </div>
 
       <div class="ms-auto">

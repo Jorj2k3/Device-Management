@@ -36,25 +36,11 @@
     </div>
     
   } @else {
-    <ul class="nav nav-tabs mb-4 mt-2">
-      <li class="nav-item">
-        <a class="nav-link fs-5" [class.active]="activeTab === 'my-devices'" 
-           (click)="activeTab = 'my-devices'" style="cursor: pointer;">
-           My Devices
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link fs-5" [class.active]="activeTab === 'available'" 
-           (click)="activeTab = 'available'" style="cursor: pointer;">
-           Available Devices
-        </a>
-      </li>
-    </ul>
-
-    <div class="row">
+    <div class="row mt-4">
       <div class="col-12">
         
         @if (activeTab === 'my-devices') {
+          <h3 class="mb-3 text-primary"><i class="bi bi-person-badge me-2"></i>My Assigned Devices</h3>
           <app-device-table 
             [devices]="myDevices" 
             [mode]="'my-devices'"
@@ -63,6 +49,7 @@
         }
         
         @if (activeTab === 'available') {
+          <h3 class="mb-3 text-success"><i class="bi bi-box-seam me-2"></i>Available in Inventory</h3>
           <app-device-table 
             [devices]="availableDevices" 
             [mode]="'available'"
