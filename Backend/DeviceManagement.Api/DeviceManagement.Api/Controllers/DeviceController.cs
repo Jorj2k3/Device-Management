@@ -93,7 +93,7 @@ namespace DeviceManagement.Api.Controllers
 
         // PUT: api/Devices/{id}
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
