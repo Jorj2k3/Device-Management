@@ -45,4 +45,8 @@ export class ApiService {
   deleteDevice(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/Devices/${id}`);
   }
+
+  generateDescription(deviceData: any): Observable<{description: string}> {
+    return this.http.post<{description: string}>(`${this.baseUrl}/GenerateDescription`, deviceData);
+  }
 }
