@@ -42,9 +42,9 @@ export class DeviceFormComponent implements OnInit, OnChanges {
       osVersion: ['', Validators.required],
       processor: ['', Validators.required],
       ramAmountGb: [null, [Validators.required, Validators.min(1)]],
-      status: ['Available', Validators.required],
+      status: ['Available'],
       description: [''],
-      assignedUserId: [null],
+      assignedUserID: [null],
       assignedUserName: [null]
     });
   }
@@ -66,7 +66,7 @@ export class DeviceFormComponent implements OnInit, OnChanges {
         type: 'Laptop', 
         operatingSystem: 'Windows', 
         status: 'Available',
-        assignedUserId: null,
+        assignedUserID: null,
         assignedUserName: null
       });
     }
