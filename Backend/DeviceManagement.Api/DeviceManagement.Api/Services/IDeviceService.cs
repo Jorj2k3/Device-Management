@@ -1,4 +1,5 @@
-﻿using DeviceManagement.Api.Models;
+﻿using DeviceManagement.Api.DTOs;
+using DeviceManagement.Api.Models;
 
 namespace DeviceManagement.Api.Services
 {
@@ -12,5 +13,6 @@ namespace DeviceManagement.Api.Services
         Task<Device> CreateDeviceAsync(Device device);
         Task<Device?> UpdateDeviceAsync(int id, Device device);
         Task<bool> DeleteDeviceAsync(int id);
+        Task<IEnumerable<DeviceDTO>> SearchDevicesAsync(string query);
     }
 }

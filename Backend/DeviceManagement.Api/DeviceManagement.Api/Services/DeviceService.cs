@@ -1,4 +1,5 @@
 ﻿using DeviceManagement.Api.Data;
+using DeviceManagement.Api.DTOs;
 using DeviceManagement.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -65,6 +66,53 @@ namespace DeviceManagement.Api.Services
 
             await _context.SaveChangesAsync();
             return existingDevice;
+        }
+
+        public async Task<IEnumerable<DeviceDTO>> SearchDevicesAsync(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                var all = await GetAllDevicesAsync();
+                return (IEnumerable<DeviceDTO>)await GetAllDevicesAsync();
+            }
+
+            var delimiters = new char[] { ' ', ',', '.', ';', ':', '-', '_' };
+            var tokens = query.ToLowerInvariant()
+                              .Split(delimiters, StringSplitOptions.RemoveEmptyEntries)
+                              .Distinct()
+                              .ToList();
+
+            var allDevices = await _context.Devices.Include(d => d.AssignedUser).ToListAsync();
+
+            var matchingDevices = allDevices.Select(device =>
+            {
+                int score = 0;
+                string name = device.Name?.ToLowerInvariant() ?? "";
+                string manufacturer = device.Manufacturer?.ToLowerInvariant() ?? "";
+                string type = device.Type?.ToLowerInvariant() ?? "";
+                string operatingSystem = device.OperatingSystem?.ToLowerInvariant() ?? "";
+                string processor = device.Processor?.ToLowerInvariant() ?? "";
+                string ram = device.RamAmountGb.ToString();
+
+                foreach (var token in tokens)
+                {
+                    if (name.Contains(token)) score += 10;
+                    if (manufacturer.Contains(token)) score += 5;
+                    if (type.Contains(token)) score += 3;
+                    if (operatingSystem.Contains(token)) score += 2;
+                    if (processor.Contains(token)) score += 1;
+                    if (ram.Contains(token)) score += 1;
+                }
+
+                return new { Device = device, Score = score };
+            })
+                .Where(x => x.Score > 0)
+                .OrderByDescending(x => x.Score)
+                .ThenBy(x => x.Device.Name ?? "")
+                .Select(x => x.Device.ToDTO())
+                .ToList();
+
+            return matchingDevices;
         }
     }
 }

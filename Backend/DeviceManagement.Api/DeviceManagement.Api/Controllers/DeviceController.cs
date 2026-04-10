@@ -149,6 +149,9 @@ namespace DeviceManagement.Api.Controllers
 
         [HttpPost("GenerateDescription")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<object>> GenerateDescription([FromBody] DeviceDTO specs)
         {
             var description = await _aiService.GenerateDeviceDescriptionAsync(
@@ -156,6 +159,16 @@ namespace DeviceManagement.Api.Controllers
                 specs.Type, specs.RamAmountGb, specs.Processor);
 
             return Ok(new { description = description });
+        }
+
+        [HttpGet("Search")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<DeviceDTO>>> SearchDevices([FromQuery] string? q)
+        {
+            var devices = await _deviceService.SearchDevicesAsync(q);
+            return Ok(devices);
         }
     }
 }
