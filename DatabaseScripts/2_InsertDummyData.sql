@@ -42,28 +42,28 @@ DECLARE @AliceId INT = (SELECT Id FROM Users WHERE Email = 'admin@company.com');
 DECLARE @BobId INT = (SELECT Id FROM Users WHERE Email = 'bob@company.com');
 
 -- Device 1: Alice's MacBook
-IF NOT EXISTS (SELECT 1 FROM Devices WHERE Name = 'MacBook Pro 16' AND AssignedUserID = @AliceId)
+IF NOT EXISTS (SELECT 1 FROM Devices WHERE Name = 'MacBook Pro 16')
 BEGIN
     INSERT INTO Devices (Name, Manufacturer, Type, OperatingSystem, OsVersion, Processor, RamAmountGB, Description, Status, AssignedUserID)
     VALUES ('MacBook Pro 16', 'Apple', 'Laptop', 'macOS', 'Sonoma 14.4', 'M3 Max', 32, 'High-end developer machine', 'In Use', @AliceId);
 END
 
 -- Device 2: Bob's ThinkPad
-IF NOT EXISTS (SELECT 1 FROM Devices WHERE Name = 'ThinkPad X1 Carbon' AND AssignedUserID = @BobId)
+IF NOT EXISTS (SELECT 1 FROM Devices WHERE Name = 'ThinkPad X1 Carbon')
 BEGIN
     INSERT INTO Devices (Name, Manufacturer, Type, OperatingSystem, OsVersion, Processor, RamAmountGB, Description, Status, AssignedUserID)
     VALUES ('ThinkPad X1 Carbon', 'Lenovo', 'Laptop', 'Windows', '11 Pro', 'Intel Core i7', 16, 'Standard issue corporate laptop', 'In Use', @BobId);
 END
 
 -- Device 3: Bob's iPhone
-IF NOT EXISTS (SELECT 1 FROM Devices WHERE Name = 'iPhone 15 Pro' AND AssignedUserID = @BobId)
+IF NOT EXISTS (SELECT 1 FROM Devices WHERE Name = 'iPhone 15 Pro')
 BEGIN
     INSERT INTO Devices (Name, Manufacturer, Type, OperatingSystem, OsVersion, Processor, RamAmountGB, Description, Status, AssignedUserID)
     VALUES ('iPhone 15 Pro', 'Apple', 'Smartphone', 'iOS', '17.4', 'A17 Pro', 8, 'Corporate mobile device', 'In Use', @BobId);
 END
 
--- Device 4: Unassigned Samsung Tablet (Status uses default 'Available')
-IF NOT EXISTS (SELECT 1 FROM Devices WHERE Name = 'Galaxy Tab S9' AND AssignedUserID IS NULL)
+-- Device 4: Unassigned Samsung Tablet
+IF NOT EXISTS (SELECT 1 FROM Devices WHERE Name = 'Galaxy Tab S9')
 BEGIN
     INSERT INTO Devices (Name, Manufacturer, Type, OperatingSystem, OsVersion, Processor, RamAmountGB, Description, AssignedUserID)
     VALUES ('Galaxy Tab S9', 'Samsung', 'Tablet', 'Android', '14.0', 'Snapdragon 8 Gen 2', 12, 'For field testing', NULL);
