@@ -9,7 +9,7 @@ import { Device } from '../models/device.model';
 export class ApiService {
   private http = inject(HttpClient);
 
-  private baseUrl = '/api'; 
+  private baseUrl = '/api/v1'; 
 
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/Users`);

@@ -1,13 +1,21 @@
-﻿using DeviceManagement.Api.DTOs;
+﻿using Asp.Versioning;
+using DeviceManagement.Api.DTOs;
 using DeviceManagement.Api.Services;
 using DeviceManagement.Api.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DeviceManagement.Api.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// AuthController handles user authentication and registration requests.
+    /// It provides endpoints for users to log in and register new accounts.
+    /// The controller interacts with the IUserService to manage user data and the ITokenGenerator to create JWT tokens for authenticated users.
+    /// It ensures secure handling of user credentials and returns appropriate HTTP responses based on the success or failure of each operation.
+    /// </summary>
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {

@@ -7,7 +7,7 @@ import { Observable, tap } from 'rxjs';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/Auth'; 
+  private baseUrl = '/api/v1/Auth'; 
 
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/Login`, credentials).pipe(

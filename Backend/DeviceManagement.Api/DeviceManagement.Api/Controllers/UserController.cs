@@ -1,4 +1,5 @@
-﻿using DeviceManagement.Api.DTOs;
+﻿using Asp.Versioning;
+using DeviceManagement.Api.DTOs;
 using DeviceManagement.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,8 +13,8 @@ namespace DeviceManagement.Api.Controllers
     /// including creating, retrieving, updating, and deleting user records. 
     /// It interacts with the IUserService to perform these operations and returns appropriate HTTP responses based on the outcome of each request.
     /// </summary>
-
-    [Route("api/[controller]s")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]s")]
     [ApiController]
     [Authorize]
     public class UserController : ControllerBase

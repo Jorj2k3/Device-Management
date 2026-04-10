@@ -1,8 +1,9 @@
-﻿using DeviceManagement.Api.DTOs;
+﻿using Asp.Versioning;
+using DeviceManagement.Api.DTOs;
 using DeviceManagement.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DeviceManagement.Api.Controllers
 {
@@ -12,7 +13,8 @@ namespace DeviceManagement.Api.Controllers
     /// It interacts with the IDeviceService to perform these operations and returns appropriate HTTP responses based on the outcome of each request.
     /// </summary>
 
-    [Route("api/[controller]s")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]s")]
     [ApiController]
     [Authorize]
     public class DeviceController : ControllerBase
