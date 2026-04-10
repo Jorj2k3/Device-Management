@@ -9,10 +9,13 @@ import { DeviceTableComponent } from '../device-table/device-table.component';
 import { DeviceDetailsComponent } from '../device-details/device-details.component';
 import { DeviceFormComponent } from '../device-form/device-form.component';
 
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
 @Component({
   selector: 'app-device-list',
   standalone: true,
-  imports: [CommonModule, DeviceTableComponent, DeviceDetailsComponent, DeviceFormComponent], 
+  imports: [CommonModule, DeviceTableComponent, DeviceDetailsComponent, DeviceFormComponent, ReactiveFormsModule], 
   templateUrl: './device-list.component.html',
   styleUrl: './device-list.component.scss'
 })
@@ -36,6 +39,8 @@ export class DeviceListComponent implements OnInit {
   isCreating = false;
   isEditing = false;
 
+  searchControl = new FormControl('');
+
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
     this.currentUserId = this.authService.getCurrentUserId(); 
@@ -49,6 +54,13 @@ export class DeviceListComponent implements OnInit {
     });
 
     this.loadDevices();
+
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(query => {
+      this.apiService.searchDevices(query || '').subscribe(data => this.devices = data);
+    });
   }
 
   loadDevices() {
@@ -64,8 +76,6 @@ export class DeviceListComponent implements OnInit {
       error: (err) => console.error('API Error:', err)
     });
   }
-
-  // --- NEW ASSIGN / UNASSIGN METHODS ---
 
   onAssign(device: Device) {
     if (!this.currentUserId) return;
@@ -86,7 +96,6 @@ export class DeviceListComponent implements OnInit {
 
     this.apiService.updateDevice(device.id, updatedDevice).subscribe({
       next: () => {
-        // Automatically jump to the Available tab when they return a device!
         this.router.navigate([], { queryParams: { tab: 'available' } }); 
         this.loadDevices();
       },
