@@ -24,7 +24,24 @@ export class SignupComponent {
   
   errorMessage = '';
 
+  validateEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
   onSubmit() {
+    if (!this.newUser.name || !this.newUser.email || !this.newUser.password || !this.newUser.location) {
+      this.errorMessage = 'All fields are required.';
+      return;
+    }
+    if (!this.validateEmail(this.newUser.email)) {
+      this.errorMessage = 'Please enter a valid email address.';
+      return;
+    }
+    if (this.newUser.password.length < 6) {
+      this.errorMessage = 'Password must be at least 6 characters.';
+      return;
+    }
+    this.errorMessage = '';
     this.authService.register(this.newUser).subscribe({
       next: () => {
         alert('Account created successfully! Please log in.');
