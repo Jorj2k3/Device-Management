@@ -29,7 +29,7 @@ Make sure you have the following installed:
 	docker compose up -d --build
 	```
 4. **Access the Application**
-	- Frontend UI: [http://localhost:4200](http://localhost:4200) (or whichever port is exposed in docker-compose)
+	- Frontend UI: [http://localhost/login)](http://localhost/login) 
 
 ### 🔐 Test Credentials
 The database is automatically seeded with dummy data upon creation. You can use the following credentials to test the application:
