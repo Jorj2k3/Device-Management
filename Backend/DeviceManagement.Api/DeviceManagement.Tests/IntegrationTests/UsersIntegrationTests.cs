@@ -38,7 +38,7 @@ namespace DeviceManagement.Tests.IntegrationTests
         [Fact]
         public async Task GetAllUsers_ReturnsEmptyList_WhenDatabaseIsEmpty()
         {
-            var response = await _client.GetAsync("/api/Users");
+            var response = await _client.GetAsync("/api/v1/Users");
 
             response.EnsureSuccessStatusCode();
 
@@ -59,14 +59,14 @@ namespace DeviceManagement.Tests.IntegrationTests
                 Location = "Server Room"
             };
 
-            var postResponse = await _client.PostAsJsonAsync("/api/Users", newUser);
+            var postResponse = await _client.PostAsJsonAsync("/api/v1/Users", newUser);
             postResponse.EnsureSuccessStatusCode();
 
             var createdUser = await postResponse.Content.ReadFromJsonAsync<UserDTO>();
             Assert.NotNull(createdUser);
             int newUserId = createdUser.Id;
 
-            var getResponse = await _client.GetAsync($"/api/Users/{newUserId}");
+            var getResponse = await _client.GetAsync($"/api/v1/Users/{newUserId}");
             getResponse.EnsureSuccessStatusCode();
 
             var retrievedUser = await getResponse.Content.ReadFromJsonAsync<UserDTO>();
@@ -87,7 +87,7 @@ namespace DeviceManagement.Tests.IntegrationTests
                 Location = "Server Room"
             };
 
-            var postResponse = await _client.PostAsJsonAsync("/api/Users", newUser);
+            var postResponse = await _client.PostAsJsonAsync("/api/v1/Users", newUser);
             postResponse.EnsureSuccessStatusCode();
 
             var createdUser = await postResponse.Content.ReadFromJsonAsync<UserDTO>();
@@ -103,10 +103,10 @@ namespace DeviceManagement.Tests.IntegrationTests
                 Location = "Server Room"
             };
 
-            var putResponse = await _client.PutAsJsonAsync($"/api/Users/{updateUserId}", updatedUser);
+            var putResponse = await _client.PutAsJsonAsync($"/api/v1/Users/{updateUserId}", updatedUser);
             Assert.Equal(System.Net.HttpStatusCode.NoContent, putResponse.StatusCode);
 
-            var getResponse = await _client.GetAsync($"/api/Users/{updateUserId}");
+            var getResponse = await _client.GetAsync($"/api/v1/Users/{updateUserId}");
             getResponse.EnsureSuccessStatusCode();
 
             var retrievedUser = await getResponse.Content.ReadFromJsonAsync<UserDTO>();
@@ -142,17 +142,17 @@ namespace DeviceManagement.Tests.IntegrationTests
                 Location = "Server Room"
             };
 
-            var postResponse = await _client.PostAsJsonAsync("/api/Users", newUser);
+            var postResponse = await _client.PostAsJsonAsync("/api/v1/Users", newUser);
             postResponse.EnsureSuccessStatusCode();
 
             var createdUser = await postResponse.Content.ReadFromJsonAsync<UserDTO>();
             Assert.NotNull(createdUser);
             int deleteUserId = createdUser.Id;
 
-            var deleteResponse = await _client.DeleteAsync($"/api/Users/{deleteUserId}");
+            var deleteResponse = await _client.DeleteAsync($"/api/v1/Users/{deleteUserId}");
             deleteResponse.EnsureSuccessStatusCode();
 
-            var response = await _client.GetAsync("/api/Users");
+            var response = await _client.GetAsync("/api/v1/Users");
 
             response.EnsureSuccessStatusCode();
 

@@ -38,7 +38,7 @@ namespace DeviceManagement.Tests.IntegrationTests
         [Fact]
         public async Task GetAllDevices_ReturnsEmptyList_WhenDatabaseIsEmpty()
         {
-            var response = await _client.GetAsync("/api/Devices");
+            var response = await _client.GetAsync("/api/v1/Devices");
 
             response.EnsureSuccessStatusCode();
 
@@ -62,14 +62,14 @@ namespace DeviceManagement.Tests.IntegrationTests
                 Description = "Device created during integration testing",
                 AssignedUserID = null
             };
-            var postResponse = await _client.PostAsJsonAsync("/api/Devices", newDevice);
+            var postResponse = await _client.PostAsJsonAsync("/api/v1/Devices", newDevice);
             postResponse.EnsureSuccessStatusCode();
 
             var createdDevice = await postResponse.Content.ReadFromJsonAsync<DeviceDTO>();
             Assert.NotNull(createdDevice);
             int newDeviceId = createdDevice.Id;
 
-            var getResponse = await _client.GetAsync($"/api/Devices/{newDeviceId}");
+            var getResponse = await _client.GetAsync($"/api/v1/Devices/{newDeviceId}");
             getResponse.EnsureSuccessStatusCode();
 
             var retrievedDevice = await getResponse.Content.ReadFromJsonAsync<DeviceDTO>();
@@ -90,7 +90,7 @@ namespace DeviceManagement.Tests.IntegrationTests
         public async Task GetDevice_ReturnsNotFound_WhenIdDoesNotExist()
         {
             int fakeId = 999;
-            var response = await _client.GetAsync($"/api/Devices/{fakeId}");
+            var response = await _client.GetAsync($"/api/v1/Devices/{fakeId}");
             Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
 
         }
@@ -110,7 +110,7 @@ namespace DeviceManagement.Tests.IntegrationTests
                 Description = "Device created during integration testing",
                 AssignedUserID = null
             };
-            var postResponse = await _client.PostAsJsonAsync("/api/Devices", newDevice);
+            var postResponse = await _client.PostAsJsonAsync("/api/v1/Devices", newDevice);
             postResponse.EnsureSuccessStatusCode();
 
             var createdDevice = await postResponse.Content.ReadFromJsonAsync<DeviceDTO>();
@@ -131,10 +131,10 @@ namespace DeviceManagement.Tests.IntegrationTests
                 AssignedUserID = null
             };
 
-            var putResponse = await _client.PutAsJsonAsync($"/api/Devices/{updateDeviceId}", updatedDevice);
+            var putResponse = await _client.PutAsJsonAsync($"/api/v1/Devices/{updateDeviceId}", updatedDevice);
             Assert.Equal(System.Net.HttpStatusCode.NoContent, putResponse.StatusCode);
 
-            var getResponse = await _client.GetAsync($"/api/Devices/{updateDeviceId}");
+            var getResponse = await _client.GetAsync($"/api/v1/Devices/{updateDeviceId}");
             getResponse.EnsureSuccessStatusCode();
 
             var retrievedDevice = await getResponse.Content.ReadFromJsonAsync<DeviceDTO>();
@@ -185,17 +185,17 @@ namespace DeviceManagement.Tests.IntegrationTests
                 AssignedUserID = null
             };
 
-            var postResponse = await _client.PostAsJsonAsync("/api/Devices", newDevice);
+            var postResponse = await _client.PostAsJsonAsync("/api/v1/Devices", newDevice);
             postResponse.EnsureSuccessStatusCode();
 
             var createdDevice = await postResponse.Content.ReadFromJsonAsync<DeviceDTO>();
             Assert.NotNull(createdDevice);
             int deleteDeviceId = createdDevice.Id;
 
-            var deleteResponse = await _client.DeleteAsync($"/api/Devices/{deleteDeviceId}");
+            var deleteResponse = await _client.DeleteAsync($"/api/v1/Devices/{deleteDeviceId}");
             deleteResponse.EnsureSuccessStatusCode();
 
-            var response = await _client.GetAsync("/api/Devices");
+            var response = await _client.GetAsync("/api/v1/Devices");
             response.EnsureSuccessStatusCode();
 
             var devices = await response.Content.ReadFromJsonAsync<List<DeviceDTO>>();
