@@ -50,8 +50,7 @@ Alternatively, you can use the Register page to create a brand new standard empl
 
 ## 🛑 Stopping the Application
 To gracefully stop the application and database, run:
-
-Bash
+```bash
 docker compose down
 ```
 
