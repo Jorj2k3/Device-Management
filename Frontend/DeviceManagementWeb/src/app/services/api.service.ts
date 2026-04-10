@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Device } from '../models/device.model';
 
 @Injectable({
   providedIn: 'root'
@@ -48,5 +49,12 @@ export class ApiService {
 
   generateDescription(deviceData: any): Observable<{description: string}> {
     return this.http.post<{description: string}>(`${this.baseUrl}/Devices/GenerateDescription`, deviceData);
+  }
+
+  searchDevices(query: string): Observable<Device[]> {
+    if (!query || query.trim() === '') {
+      return this.getDevices();
+    }
+    return this.http.get<Device[]>(`${this.baseUrl}/Devices/Search?q=${encodeURIComponent(query)}`);
   }
 }
